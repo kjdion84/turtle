@@ -60,6 +60,8 @@ class AuthController extends Controller
     // logout
     public function logout()
     {
+        activity('Logged Out');
+        
         auth()->guard()->logout();
         request()->session()->invalidate();
 
