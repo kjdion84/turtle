@@ -19,6 +19,7 @@ class AuthController extends Controller
     {
         $this->middleware('guest')->only(['loginForm', 'login', 'registerForm', 'register', 'passwordEmailForm', 'passwordEmail', 'passwordResetForm', 'passwordReset']);
         $this->middleware('auth')->only(['logout', 'profileForm', 'profile', 'passwordUpdateForm', 'passwordUpdate']);
+        $this->middleware('allow:registration')->only(['registerForm', 'register']);
     }
 
     // show login form

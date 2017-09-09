@@ -11,6 +11,7 @@ class AppController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->only('dashboard');
+        $this->middleware('allow:contact')->only(['contactForm', 'contact']);
     }
 
     // determine index route/view

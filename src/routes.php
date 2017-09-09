@@ -6,19 +6,15 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('home', config('turtle.controllers.app') . '@indexRedirect');
     Route::get('dashboard', config('turtle.controllers.app') . '@dashboard')->name('dashboard');
     Route::get('delete/{route}/{id}', config('turtle.controllers.app') . '@deleteModal')->name('delete');
-    Route::group(['middleware' => 'allow:contact'], function () {
-        Route::get('contact', config('turtle.controllers.app') . '@contactForm')->name('contact');
-        Route::post('contact', config('turtle.controllers.app') . '@contact');
-    });
+    Route::get('contact', config('turtle.controllers.app') . '@contactForm')->name('contact');
+    Route::post('contact', config('turtle.controllers.app') . '@contact');
 
     // auth routes
     Route::get('login', config('turtle.controllers.auth') . '@loginForm')->name('login');
     Route::post('login', config('turtle.controllers.auth') . '@login');
     Route::get('logout', config('turtle.controllers.auth') . '@logout')->name('logout');
-    Route::group(['middleware' => 'allow:registration'], function () {
-        Route::get('register', config('turtle.controllers.auth') . '@registerForm')->name('register');
-        Route::post('register', config('turtle.controllers.auth') . '@register');
-    });
+    Route::get('register', config('turtle.controllers.auth') . '@registerForm')->name('register');
+    Route::post('register', config('turtle.controllers.auth') . '@register');
     Route::get('profile', config('turtle.controllers.auth') . '@profileForm')->name('profile');
     Route::patch('profile', config('turtle.controllers.auth') . '@profile');
     Route::get('password/email', config('turtle.controllers.auth') . '@passwordEmailForm')->name('password.email');
