@@ -1,6 +1,6 @@
 @extends('turtle::layouts.modal')
 
-@section('title', 'Update crud_model_strings')
+@section('title', 'Update crud_model_string')
 @section('content')
     <form method="POST" action="{{ route('crud_model_variables.update', $crud_model_variable->id) }}" novalidate>
         {{ method_field('PATCH') }}
