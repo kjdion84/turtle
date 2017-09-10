@@ -21,8 +21,8 @@ class CreatePermissionsTables extends Migration
         // create role user relation table
         Schema::create('role_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('role_id');
-            $table->integer('user_id');
+            $table->integer('role_id')->unsigned();
+            $table->integer('user_id')->unsigned();
 
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -42,8 +42,8 @@ class CreatePermissionsTables extends Migration
         // create permission role relation table
         Schema::create('permission_role', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('permission_id');
-            $table->integer('role_id');
+            $table->integer('permission_id')->unsigned();
+            $table->integer('role_id')->unsigned();
 
             $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
