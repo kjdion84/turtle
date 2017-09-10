@@ -1,6 +1,6 @@
 {
   "name": "kjdion84/turtle",
-  "description": "A Laravel 5.5 Package",
+  "description": "A Laravel 5.5 package with front & backend scaffolding including a CRUD generator, auth integration, roles, permissions, contact forms, reCAPTCHA, activity logs, demo mode, user timezones, AJAX CRUD/validation, Bootstrap 4, DataTables, & more!",
   "homepage": "https://github.com/kjdion84/turtle",
   "license": "MIT",
   "authors": [
@@ -30,5 +30,15 @@
         "Kjdion84\\Turtle\\TurtleServiceProvider"
       ]
     }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "php artisan vendor:publish --provider=Kjdion84\\Turtle\\TurtleServiceProvider --tag=config",
+      "php artisan vendor:publish --provider=Kjdion84\\Turtle\\TurtleServiceProvider --tag=layout",
+      "php artisan vendor:publish --provider=Kjdion84\\Turtle\\TurtleServiceProvider --tag=public"
+    ],
+    "post-update-cmd": [
+      "php artisan vendor:publish --provider=Kjdion84\\Turtle\\TurtleServiceProvider --tag=public --force"
+    ]
   }
 }

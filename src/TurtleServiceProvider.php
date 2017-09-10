@@ -14,7 +14,7 @@ class TurtleServiceProvider extends ServiceProvider
     public function boot()
     {
         // config
-        $this->publishes([__DIR__ . '/../config/turtle.php' => config_path('turtle.php')], 'required');
+        $this->publishes([__DIR__ . '/../config/turtle.php' => config_path('turtle.php')], 'config');
 
         // routes
         $this->loadRoutesFrom(__DIR__ . '/routes.php');
@@ -25,11 +25,11 @@ class TurtleServiceProvider extends ServiceProvider
 
         // views
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'turtle');
-        $this->publishes([__DIR__ . '/../resources/views/layouts/app.blade.php' => resource_path('views/kjdion84/turtle/layouts/app.blade.php')], 'required');
+        $this->publishes([__DIR__ . '/../resources/views/layouts/app.blade.php' => resource_path('views/kjdion84/turtle/layouts/app.blade.php')], 'layout');
         $this->publishes([__DIR__ . '/../resources/views' => resource_path('views/kjdion84/turtle')], 'views');
 
         // assets
-        $this->publishes([__DIR__ . '/../public' => public_path('kjdion84/turtle')], 'required');
+        $this->publishes([__DIR__ . '/../public' => public_path('kjdion84/turtle')], 'public');
 
         // allow middleware
         $this->app['router']->aliasMiddleware('allow', 'Kjdion84\Turtle\Middleware\Allow');

@@ -17,12 +17,6 @@ Turtle is a Laravel 5.5 package with front & backend scaffolding including a CRU
 composer require kjdion84/turtle:"~1.0"
 ```
 
-## Publish Required Files
-
-```
-php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="required"
-```
-
 This will create the following files:
 
 ```

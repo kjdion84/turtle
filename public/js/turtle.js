@@ -1,7 +1,21 @@
 // default datatable settings
 $.extend(true, $.fn.dataTable.defaults, {
+    lengthMenu: [5, 10, 25, 50, 100, 250, 500],
+    pageLength: 25,
     processing: true,
     serverSide: true,
+    stateSave: true,
+    stateDuration: 0,
+    stateSaveParams: function (settings, data) {
+        data.search.search = '';
+        data.start = 0;
+    },
+    stateSaveCallback: function (settings, data) {
+        localStorage.setItem($(this).attr('id'), JSON.stringify(data));
+    },
+    stateLoadCallback: function () {
+        return JSON.parse(localStorage.getItem($(this).attr('id')));
+    },
     columnDefs: [
         {
             targets: 'actions',
