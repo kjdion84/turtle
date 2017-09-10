@@ -58,7 +58,9 @@ $(document).ready(function () {
         $.ajax({
             url: form.attr('action'),
             type: form.attr('method'),
-            data: form.serialize(),
+            contentType: false,
+            processData: false,
+            data: new FormData(form[0]),
             success: function (data) {
                 // perform redirect
                 if (data.hasOwnProperty('redirect')) {
