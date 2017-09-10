@@ -17,6 +17,12 @@ Turtle is a Laravel 5.5 package with front & backend scaffolding including a CRU
 composer require kjdion84/turtle:"~1.0"
 ```
 
+## Publish Required Files
+
+```
+php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="required"
+```
+
 This will create the following files:
 
 ```
@@ -113,6 +119,16 @@ You can publish all of the views to `resources/views/kjdion84/turtle/*.*` with:
 ```
 php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="views"
 ```
+
+# Updating
+
+Since composer does not allow `scripts` in package `composer.json` files, you must run this to update the public assets:
+
+```
+php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="public" --force
+```
+
+Or add that command to `post-update-cmd` under `scripts` in your Laravel root `composer.json` file.
 
 # Configuration
 

@@ -30,15 +30,5 @@
         "Kjdion84\\Turtle\\TurtleServiceProvider"
       ]
     }
-  },
-  "scripts": {
-    "post-package-install": [
-      "php artisan vendor:publish --provider=Kjdion84\\Turtle\\TurtleServiceProvider --tag=config",
-      "php artisan vendor:publish --provider=Kjdion84\\Turtle\\TurtleServiceProvider --tag=layout",
-      "php artisan vendor:publish --provider=Kjdion84\\Turtle\\TurtleServiceProvider --tag=public"
-    ],
-    "post-package-update": [
-      "php artisan vendor:publish --provider=Kjdion84\\Turtle\\TurtleServiceProvider --tag=public --force"
-    ]
   }
 }
