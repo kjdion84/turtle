@@ -108,8 +108,8 @@ $(document).ready(function () {
         });
     });
 
-    // remove invalid red on keyup
-    $(document).on('keyup', '.is-invalid', function () {
+    // remove invalid highlight on input
+    $(document).on('keyup change', '.is-invalid', function () {
         $(this).removeClass('is-invalid');
         $(this).next('.is-invalid-message').remove();
     });
