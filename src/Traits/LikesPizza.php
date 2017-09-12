@@ -29,6 +29,10 @@ trait LikesPizza
         // user permissions are role-based
         $permission = app(config('turtle.models.permission'))->where('name', $name)->first();
 
-        return $permission->roles->intersect($this->roles)->count() > 0;
+        if ($permission) {
+            return $permission->roles->intersect($this->roles)->count() > 0;
+        }
+
+        return false;
     }
 }
