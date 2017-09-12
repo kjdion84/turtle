@@ -199,6 +199,7 @@ The package controller methods return a JSON response for CRUD operations. This 
 * `redirect`: redirects user to specified URL e.g. `'redirect' => route('index')`
 * `flash`: flashes alert briefly using bs4 class e.g. `'flash' => ['success', 'User created!']`
 * `dismiss_modal`: closes the current model the form is in
+* `reload_page`: reloads the current location
 * `reload_datatables`: reloads datatables on the page to display new/updated data
 
 ## CRUD Command

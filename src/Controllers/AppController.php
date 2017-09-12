@@ -76,6 +76,6 @@ class AppController extends Controller
 
         flash('success', 'Message sent!');
 
-        return response()->json(['redirect' => route('contact')]);
+        return response()->json(['reload_page' => true]);
     }
 }

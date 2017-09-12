@@ -116,7 +116,7 @@ class AuthController extends Controller
         activity('Updated Profile');
         flash('success', 'Profile updated!');
 
-        return response()->json(['redirect' => route('profile')]);
+        return response()->json(['reload_page' => true]);
     }
 
     // show password reset link email form
@@ -142,7 +142,7 @@ class AuthController extends Controller
 
             flash('success', 'Password reset link sent!');
 
-            return response()->json(['redirect' => route('password.email')]);
+            return response()->json(['reload_page' => true]);
         }
         else {
             return response()->json(['errors' => ['email' => [trans('auth.failed')]]], 422);
@@ -202,7 +202,7 @@ class AuthController extends Controller
             activity('Changed Password');
             flash('success', 'Password changed!');
 
-            return response()->json(['redirect' => route('password.change')]);
+            return response()->json(['reload_page' => true]);
         }
         else {
             return response()->json(['errors' => ['current_password' => [trans('auth.failed')]]], 422);

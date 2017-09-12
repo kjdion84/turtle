@@ -77,6 +77,11 @@ $(document).ready(function () {
                     form.closest('.modal').modal('toggle');
                 }
 
+                // reload page
+                if (data.hasOwnProperty('reload_page')) {
+                    location.reload();
+                }
+
                 // reload datatables
                 if (data.hasOwnProperty('reload_datatables')) {
                     $($.fn.dataTable.tables()).DataTable().ajax.reload();
