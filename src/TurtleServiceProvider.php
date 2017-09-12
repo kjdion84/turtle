@@ -37,7 +37,9 @@ class TurtleServiceProvider extends ServiceProvider
 
         // gate permissions
         Gate::before(function (User $user, $permission) {
-            return $user->hasPermission($permission);
+            if ($user->hasPermission($permission)) {
+                return true;
+            }
         });
 
         // validator extensions
