@@ -103,6 +103,12 @@ $(document).ready(function () {
         });
     });
 
+    // remove invalid red on keyup
+    $(document).on('keyup', '.is-invalid', function () {
+        $(this).removeClass('is-invalid');
+        $(this).next('.is-invalid-message').remove();
+    });
+
     // show ajax modal with content
     $(document).on('click', '[data-modal]', function (event) {
         event.preventDefault();
