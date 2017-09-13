@@ -1,7 +1,16 @@
 // default datatable settings
 $.extend(true, $.fn.dataTable.defaults, {
+    columnDefs: [
+        {
+            targets: 'actions',
+            className: 'actions',
+            searchable: false,
+            sortable: false
+        }
+    ],
     lengthMenu: [5, 10, 25, 50, 100, 250, 500],
     pageLength: 25,
+    language: { search: '' },
     processing: true,
     serverSide: true,
     stateSave: true,
@@ -16,14 +25,25 @@ $.extend(true, $.fn.dataTable.defaults, {
     stateLoadCallback: function () {
         return JSON.parse(localStorage.getItem($(this).attr('id')));
     },
-    columnDefs: [
-        {
-            targets: 'actions',
-            className: 'actions',
-            searchable: false,
-            sortable: false
-        }
-    ]
+    initComplete: function (settings, json) {
+        var self = this.api();
+        var filter_input = $('#' + settings.nTable.id + '_filter input').unbind();
+        var search_button = $('<button type="button" class="btn btn-link btn-sm mb-1 pr-1" data-toggle="tooltip" title="Search"><i class="fa fa-search"></i></button>').click(function () {
+            self.search(filter_input.val()).draw();
+        });
+        var reset_button = $('<button type="button" class="btn btn-link btn-sm mb-1 pl-1 pr-1" data-toggle="tooltip" title="Reset"><i class="fa fa-refresh"></i></button>').click(function () {
+            filter_input.val('');
+            search_button.click();
+        });
+
+        $(document).keypress(function (event) {
+            if (event.which === 13) {
+                search_button.click();
+            }
+        });
+
+        $('#' + settings.nTable.id + '_filter').append(search_button, reset_button);
+    }
 });
 
 $(document).ready(function () {
@@ -40,9 +60,20 @@ $(document).ready(function () {
         selector: '[data-toggle="tooltip"]'
     });
 
-    // hide tooltips on ajax complete
+    // perform on ajax complete
     $(document).ajaxComplete(function () {
+        // hide tooltips
         $('.tooltip').tooltip('hide');
+
+        // re-enable form submits
+        var submitted = $('.submitted');
+
+        submitted.find(':submit').each(function () {
+            $(this).html($(this).data('original-html'));
+            $(this).removeAttr('data-original-html');
+            $(this).css('width', 'auto');
+        });
+        submitted.removeClass('submitted');
     });
 
     // ajax form processing
@@ -51,61 +82,72 @@ $(document).ready(function () {
 
         var form = $(this);
 
-        $('.alert-fixed').remove();
-        $('.is-invalid').removeClass('is-invalid');
-        $('.is-invalid-message').remove();
+        if (!form.hasClass('submitted')) {
+            // disable extra form submits
+            form.addClass('submitted');
+            form.find(':submit').each(function () {
+                $(this).css('width', $(this).outerWidth());
+                $(this).attr('data-original-html', $(this).html());
+                $(this).html('<i class="fa fa-spinner fa-spin"></i>');
+            });
 
-        $.ajax({
-            url: form.attr('action'),
-            type: form.attr('method'),
-            contentType: false,
-            processData: false,
-            data: new FormData(form[0]),
-            success: function (data) {
-                // perform redirect
-                if (data.hasOwnProperty('redirect')) {
-                    $(location).attr('href', data.redirect);
+            // remove existing alert & invalid field info
+            $('.alert-fixed').remove();
+            $('.is-invalid').removeClass('is-invalid');
+            $('.is-invalid-message').remove();
+
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                contentType: false,
+                processData: false,
+                data: new FormData(form[0]),
+                success: function (data) {
+                    // perform redirect
+                    if (data.hasOwnProperty('redirect')) {
+                        $(location).attr('href', data.redirect);
+                    }
+
+                    // flash success message
+                    if (data.hasOwnProperty('flash')) {
+                        flash(data.flash[0], data.flash[1]);
+                    }
+
+                    // dismiss modal
+                    if (data.hasOwnProperty('dismiss_modal')) {
+                        form.closest('.modal').modal('toggle');
+                    }
+
+                    // reload page
+                    if (data.hasOwnProperty('reload_page')) {
+                        location.reload();
+                    }
+
+                    // reload datatables
+                    if (data.hasOwnProperty('reload_datatables')) {
+                        $($.fn.dataTable.tables()).DataTable().ajax.reload();
+                    }
+                },
+                error: function (data) {
+                    var element;
+
+                    // show error for each element
+                    $.each(data.responseJSON.errors, function (key, value) {
+                        element = (key === 'g-recaptcha-response') ? $('.g-recaptcha') : $('#' + key);
+                        element.addClass('is-invalid');
+                        element.after('<div class="is-invalid-message">' + value[0] + '</div>');
+                    });
+
+                    // reset recaptcha if present
+                    if (typeof grecaptcha !== 'undefined') {
+                        grecaptcha.reset();
+                    }
+
+                    // flash error message
+                    flash('danger', 'Errors have occurred.');
                 }
-
-                // flash success message
-                if (data.hasOwnProperty('flash')) {
-                    flash(data.flash[0], data.flash[1]);
-                }
-
-                // dismiss modal
-                if (data.hasOwnProperty('dismiss_modal')) {
-                    form.closest('.modal').modal('toggle');
-                }
-
-                // reload page
-                if (data.hasOwnProperty('reload_page')) {
-                    location.reload();
-                }
-
-                // reload datatables
-                if (data.hasOwnProperty('reload_datatables')) {
-                    $($.fn.dataTable.tables()).DataTable().ajax.reload();
-                }
-            },
-            error: function (data) {
-                var element;
-
-                // show error for each element
-                $.each(data.responseJSON.errors, function (key, value) {
-                    element = (key === 'g-recaptcha-response') ? $('.g-recaptcha') : $('#' + key);
-                    element.addClass('is-invalid');
-                    element.after('<div class="is-invalid-message">' + value[0] + '</div>');
-                });
-
-                // reset recaptcha if present
-                if (typeof grecaptcha !== 'undefined') {
-                    grecaptcha.reset();
-                }
-
-                // flash error message
-                flash('danger', 'Errors have occurred.');
-            }
-        });
+            });
+        }
     });
 
     // remove invalid highlight on input

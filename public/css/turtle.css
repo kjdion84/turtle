@@ -55,13 +55,13 @@ footer {
 .dataTables_wrapper {
     padding: 0;
 }
-th, td {
+.dataTables_wrapper th, .dataTables_wrapper td {
     vertical-align: middle !important;
 }
-th {
+.dataTables_wrapper th {
     white-space: nowrap;
 }
-.actions {
+.dataTables_wrapper .actions {
     white-space: nowrap;
     text-align: right;
 }

@@ -9,6 +9,14 @@ Turtle is a Laravel 5.5 package with front & backend scaffolding including a CRU
 * Repo: https://github.com/kjdion84/turtle
 * Demo: http://turtledemo.kjdion.com (admin@example.com/admin123)
 
+## Readme Navigation
+
+* [Installation](#installation)
+* [Updating](#updating)
+* [Configuration](#configuration)
+* [Usage](#usage)
+* [Issues & Support](#issues--suport)
+
 # Installation
 
 ## Require via Composer
