@@ -15,7 +15,7 @@ Turtle is a Laravel 5.5 package with front & backend scaffolding including a CRU
 * [Updating](#updating)
 * [Configuration](#configuration)
 * [Usage](#usage)
-* [Issues & Support](#issues--suport)
+* [Issues & Support](#issues--support)
 
 # Installation
 
