@@ -182,13 +182,13 @@ class AuthController extends Controller
         }
     }
 
-    // show password update form
+    // show password change form
     public function passwordChangeForm()
     {
         return view('turtle::auth.password.change');
     }
 
-    // udpate password
+    // change password
     public function passwordChange()
     {
         $this->shellshock(request(), [
