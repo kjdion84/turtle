@@ -28,12 +28,12 @@ class UserController extends Controller
     // users index datatable
     public function indexDatatable()
     {
-        $datatable = DataTables::of(User::with('roles')->get());
+        $datatable = datatables()->of(User::with('roles')->get());
         $datatable->editColumn('roles', function ($user) {
             return $user->roles->sortBy('name')->pluck('name')->implode(', ');
         });
 
-        return $datatable;
+        return $datatable->toJson();
     }
 
     // show create user modal
@@ -154,7 +154,7 @@ class UserController extends Controller
     // user activity datatable
     public function activityDatatable($id)
     {
-        return DataTables::of(app(config('turtle.models.activity'))->where('user_id', $id)->get());
+        return datatables()->of(app(config('turtle.models.activity'))->where('user_id', $id)->get())->toJson();
     }
 
     // show user activity data modal

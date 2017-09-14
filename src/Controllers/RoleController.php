@@ -3,7 +3,6 @@
 namespace Kjdion84\Turtle\Controllers;
 
 use App\Http\Controllers\Controller;
-use Yajra\DataTables\Facades\DataTables;
 
 class RoleController extends Controller
 {
@@ -25,7 +24,7 @@ class RoleController extends Controller
     // roles index datatable
     public function indexDatatable()
     {
-        return DataTables::of(app(config('turtle.models.role'))->query());
+        return datatables()->of(app(config('turtle.models.role'))->query())->toJson();
     }
 
     // show create role modal

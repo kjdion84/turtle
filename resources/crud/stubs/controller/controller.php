@@ -4,7 +4,6 @@
 
 /* crud_model_use */
 use App\Http\Controllers\Controller;
-use Yajra\DataTables\Facades\DataTables;
 
 class crud_controller_class extends Controller
 {
@@ -24,7 +23,7 @@ class crud_controller_class extends Controller
 
     public function indexDatatable()
     {
-        return DataTables::of(crud_model_class::query());
+        return datatables()->of(crud_model_class::query())->toJson();
     }
 
     public function createModal()
