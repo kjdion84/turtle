@@ -3,9 +3,7 @@
 @section('title', 'crud_model_strings')
 @section('content')
     <div class="container">
-        @can('Create crud_model_strings')
-            <button type="button" class="btn btn-primary float-right" data-modal="{{ route('crud_model_variables.create') }}" data-toggle="tooltip" title="Create"><i class="fa fa-plus"></i></button>
-        @endcan
+        @can('Create crud_model_strings')<button type="button" class="btn btn-primary btn-icon float-right" data-modal="{{ route('crud_model_variables.create') }}" data-toggle="tooltip" title="Create"><i class="fa fa-plus"></i></button>@endcan
 
         <h1 class="display-5 mt-4 mb-4">@yield('title')</h1>
 
@@ -31,8 +29,8 @@
                         render: function (data, type, full) {
                             var actions = '';
 
-                            @can('Update crud_model_strings')actions += ' <button type="button" class="btn btn-primary" data-modal="{{ route('crud_model_variables.update', ':id') }}" data-toggle="tooltip" title="Update"><i class="fa fa-pencil"></i></button> ';@endcan
-                            @can('Delete crud_model_strings')actions += ' <button type="button" class="btn btn-danger" data-modal="{{ route('delete', ['route' => 'crud_model_variables.delete', 'id' => ':id']) }}" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></button> ';@endcan
+                            @can('Update crud_model_strings')actions += ' <button type="button" class="btn btn-primary btn-icon" data-modal="{{ route('crud_model_variables.update', ':id') }}" data-toggle="tooltip" title="Update"><i class="fa fa-pencil"></i></button> ';@endcan
+                            @can('Delete crud_model_strings')actions += ' <button type="button" class="btn btn-danger btn-icon" data-modal="{{ route('delete', ['route' => 'crud_model_variables.delete', 'id' => ':id']) }}" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></button> ';@endcan
 
                             return actions.replace(/:id/g, full.id);
                         }

@@ -46,7 +46,7 @@
                         </li>
                     @endcanany
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"><i class="fa fa-user-circle-o"></i> {{ auth()->user()->name }}</a>
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"><i class="fa fa-user-circle"></i> {{ auth()->user()->name }}</a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item{{ request()->is('profile') ?  ' active' : '' }}" href="{{ route('profile') }}">Update Profile</a>
                             <a class="dropdown-item{{ request()->is('password/change') ?  ' active' : '' }}" href="{{ route('password.change') }}">Change Password</a>

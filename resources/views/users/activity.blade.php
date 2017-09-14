@@ -30,7 +30,7 @@
                         render: function (data, type, full) {
                             var actions = '';
 
-                            actions += ' <button type="button" class="btn btn-primary" data-modal="{{ route('users.activity.data', ':id') }}" data-toggle="tooltip" title="Data"><i class="fa fa-database"></i></button> ';
+                            actions += ' <button type="button" class="btn btn-primary btn-icon" data-modal="{{ route('users.activity.data', ':id') }}" data-toggle="tooltip" title="Data"><i class="fa fa-database"></i></button> ';
 
                             return actions.replace(/:id/g, full.id);
                         }

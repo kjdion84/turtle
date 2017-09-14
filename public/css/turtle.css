@@ -30,9 +30,25 @@ footer {
     line-height: 1.1;
 }
 
-/* give all buttons pointer */
+/* give all btns pointer & same width icon */
 .btn {
     cursor: pointer;
+}
+.btn-icon {
+    padding-left: 0;
+    padding-right: 0;
+}
+.btn-icon .fa {
+    width: 2.25em;
+    text-align: center;
+}
+.btn-icon.btn-sm .fa {
+    width: 2.075em;
+    text-align: center;
+}
+.btn-icon.btn-lg .fa {
+    width: 2.30em;
+    text-align: center;
 }
 
 /* fixed flash alert */
