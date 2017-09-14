@@ -12,7 +12,6 @@ Turtle is a Laravel 5.5 package with front & backend scaffolding including a CRU
 ## Readme Navigation
 
 * [Installation](#installation)
-* [Updating](#updating)
 * [Configuration](#configuration)
 * [Usage](#usage)
 * [Issues & Support](#issues--support)
@@ -38,6 +37,20 @@ config/turtle.php
 resources/views/kjdion84/turtle/layouts/app.blade.php
 public/kjdion84/turtle/*.*
 ```
+
+## Auto-Publish Public Assets After Updates
+
+Add the publish command for the `public` tag to your project `composer.json` `scripts` e.g.:
+
+```
+"scripts": {
+    "post-update-cmd": [
+        "php artisan vendor:publish --provider=Kjdion84\\Turtle\\TurtleServiceProvider --tag=public --force"
+    ]
+}
+```
+
+This will ensure the public assets are updated when you run `composer update`.
 
 ## Modify Existing Files
 
@@ -127,16 +140,6 @@ You can publish all of the views to `resources/views/kjdion84/turtle/*.*` with:
 ```
 php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="views"
 ```
-
-# Updating
-
-Since composer does not allow `scripts` in package `composer.json` files, you must run this to update the public assets:
-
-```
-php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="public" --force
-```
-
-Or add that command to `post-update-cmd` under `scripts` in your Laravel root `composer.json` file.
 
 # Configuration
 

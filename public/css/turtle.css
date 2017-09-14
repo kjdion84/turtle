@@ -44,11 +44,9 @@ footer {
 }
 .btn-icon.btn-sm .fa {
     width: 2.075em;
-    text-align: center;
 }
 .btn-icon.btn-lg .fa {
     width: 2.30em;
-    text-align: center;
 }
 
 /* fixed flash alert */
