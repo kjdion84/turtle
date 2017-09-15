@@ -27,14 +27,13 @@
             </div>
 
             <div class="form-group">
-                <div class="form-check">
-                    <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input" data-check="roles[]">
-                        Roles
-                    </label>
+                <div>
+                    <label>Roles</label>
+                    <button type="button" class="btn btn-light btn-xs ml-1" data-check-all="roles[]">Check All</button>
+                    <button type="button" class="btn btn-light btn-xs" data-check-none="roles[]">Check None</button>
                 </div>
                 @foreach ($roles as $role)
-                    <div class="form-check form-check-inline">
+                    <div class="form-check">
                         <label class="form-check-label">
                             <input type="checkbox" name="roles[]" class="form-check-input" value="{{ $role->id }}"{{ $user->roles->contains('id', $role->id) ? ' checked' : '' }}>
                             {{ $role->name }}

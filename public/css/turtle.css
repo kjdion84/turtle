@@ -30,9 +30,13 @@ footer {
     line-height: 1.1;
 }
 
-/* give all btns pointer & same width icon */
+/* btn styles */
 .btn {
     cursor: pointer;
+}
+.btn-xs {
+    padding: .15rem .35rem;
+    font-size: .75rem;
 }
 .btn-icon {
     padding-left: 0;

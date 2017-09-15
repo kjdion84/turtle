@@ -13,11 +13,10 @@
             </div>
 
             <div class="form-group">
-                <div class="form-check">
-                    <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input" data-check="permissions[]">
-                        Permissions
-                    </label>
+                <div>
+                    <label>Permissions</label>
+                    <button type="button" class="btn btn-light btn-xs ml-1" data-check-all="permissions[]">Check All</button>
+                    <button type="button" class="btn btn-light btn-xs" data-check-none="permissions[]">Check None</button>
                 </div>
                 <ul class="list-group list-group-hover">
                     @foreach ($group_permissions as $group => $permissions)

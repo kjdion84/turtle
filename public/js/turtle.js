@@ -10,7 +10,10 @@ $.extend(true, $.fn.dataTable.defaults, {
     ],
     lengthMenu: [5, 10, 25, 50, 100, 250, 500],
     pageLength: 25,
-    language: { search: '' },
+    language: {
+        search: '',
+        searchPlaceholder: 'Search'
+    },
     processing: true,
     serverSide: true,
     stateSave: true,
@@ -170,12 +173,17 @@ $(document).ready(function () {
         $(this).remove();
     });
 
-    // check/uncheck all checkboxes
-    $(document).on('click', '[data-check]', function () {
-        var checked = $(this).prop('checked');
+    // check all checkboxes
+    $(document).on('click', '[data-check-all]', function () {
+        $(this).closest('form').find('[name="' + $(this).data('check-all') + '"]').each(function () {
+            $(this).prop('checked', true).change();
+        });
+    });
 
-        $(this).closest('form').find('[name="' + $(this).data('check') + '"]').each(function () {
-            $(this).prop('checked', checked).change();
+    // uncheck all checkboxes
+    $(document).on('click', '[data-check-none]', function () {
+        $(this).closest('form').find('[name="' + $(this).data('check-none') + '"]').each(function () {
+            $(this).prop('checked', false).change();
         });
     });
 });
