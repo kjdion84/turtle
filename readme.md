@@ -54,15 +54,11 @@ This will ensure the public assets are updated when you run `composer update`.
 
 ## Modify Existing Files
 
-Add the `LikesPizza` trait to `App\User` e.g.:
+Add the `LikesPizza` trait & `timezone` fillable to `App\User` e.g.:
 
 ```
 use Notifiable, LikesPizza;
-```
 
-Add `timezone` to the `App\User` fillables e.g.:
-
-```
 protected $fillable = [
     'name', 'email', 'password', 'timezone',
 ];
@@ -74,10 +70,25 @@ Add the `Shellshock` trait to `App\Http\Controllers\Controller` e.g.:
 use AuthorizesRequests, DispatchesJobs, ValidatesRequests, Shellshock;
 ```
 
-**(Recommended but optional)** uncomment `AuthenticateSession` inside of `App\Http\Kernel` e.g.:
+Uncomment `AuthenticateSession` inside of `App\Http\Kernel` e.g.:
 
 ```
 \Illuminate\Session\Middleware\AuthenticateSession::class,
+```
+
+Add expired session handling to the `App\Exceptions\Handler` `render()` method e.g.:
+
+```
+public function render($request, Exception $exception)
+{
+    if ($exception instanceof TokenMismatchException) {
+        flash('danger', 'Session expired, please try again.');
+
+        return response()->json(['reload_page' => true]);
+    }
+
+    return parent::render($request, $exception);
+}
 ```
 
 ## Config & Migrate
