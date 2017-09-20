@@ -14,7 +14,7 @@ class UpdateUsersTable extends Migration
         });
 
         // create admin user
-        App\User::create(['name' => 'Admin', 'email' => 'admin@example.com', 'password' => Hash::make('admin123')]);
+        app(config('turtle.models.user'))->create(['name' => 'Admin', 'email' => 'admin@example.com', 'password' => Hash::make('admin123')]);
     }
 
     public function down()

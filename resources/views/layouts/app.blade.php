@@ -9,10 +9,10 @@
     <title>@yield('title') | {{ config('app.name') }}</title>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('kjdion84/turtle/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('kjdion84/turtle/css/fontawesome.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('kjdion84/turtle/css/datatables.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('kjdion84/turtle/css/turtle.css') }}">
+    <link rel="stylesheet" href="{{ asset('turtle/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('turtle/css/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('turtle/css/datatables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('turtle/css/turtle.css') }}">
 </head>
 <body{!! session('flash') ? ' data-flash-class="'.session('flash.0').'" data-flash-message="'.session('flash.1').'"' : '' !!}>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -71,11 +71,11 @@
 </footer>
 
 <!-- Scripts -->
-<script src="{{ asset('kjdion84/turtle/js/jquery.min.js') }}"></script>
-<script src="{{ asset('kjdion84/turtle/js/popper.min.js') }}"></script>
-<script src="{{ asset('kjdion84/turtle/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('kjdion84/turtle/js/datatables.min.js') }}"></script>
-<script src="{{ asset('kjdion84/turtle/js/turtle.js') }}"></script>
+<script src="{{ asset('turtle/js/jquery.min.js') }}"></script>
+<script src="{{ asset('turtle/js/popper.min.js') }}"></script>
+<script src="{{ asset('turtle/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('turtle/js/datatables.min.js') }}"></script>
+<script src="{{ asset('turtle/js/turtle.js') }}"></script>
 @stack('scripts')
 </body>
 </html>

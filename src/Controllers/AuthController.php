@@ -3,7 +3,6 @@
 namespace Kjdion84\Turtle\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\User;
 use GrahamCampbell\Throttle\Facades\Throttle;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
@@ -86,7 +85,7 @@ class AuthController extends Controller
         ]);
 
         request()->merge(['password' => Hash::make(request()->input('password'))]);
-        $user = User::create(request()->all());
+        $user = app(config('turtle.models.user'))->create(request()->all());
         event(new Registered($user));
         auth()->guard()->login($user);
 
@@ -132,7 +131,7 @@ class AuthController extends Controller
             'email' => 'required|email',
         ]);
 
-        if (($user = User::where('email', request()->input('email'))->first())) {
+        if (($user = app(config('turtle.models.user'))->where('email', request()->input('email'))->first())) {
             $token = Password::getRepository()->create($user);
 
             Mail::send(['text' => 'turtle::emails.password'], ['token' => $token], function (Message $message) use ($user) {
@@ -163,7 +162,7 @@ class AuthController extends Controller
             'password' => 'required|confirmed',
         ]);
 
-        $response = Password::broker()->reset(request()->except('_token'), function (User $user, $password) {
+        $response = Password::broker()->reset(request()->except('_token'), function ($user, $password) {
             $user->password = Hash::make($password);
             $user->setRememberToken(Str::random(60));
             $user->save();

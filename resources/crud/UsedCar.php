@@ -8,7 +8,7 @@ return [
         'controller' => 'app/Http/Controllers',
         'model' => 'app',
         'views' => 'resources/views',
-        'navbar' => 'resources/views/kjdion84/turtle/layouts/app.blade.php',
+        'navbar' => 'resources/views/vendor/turtle/layouts/app.blade.php',
         'routes' => 'routes/web.php',
     ],
 

@@ -29,7 +29,7 @@ class CreatePermissionsTables extends Migration
         });
 
         // attach admin user role
-        App\User::where('email', 'admin@example.com')->first()->roles()->attach($admin_role->id);
+        app(config('turtle.models.user'))->where('email', 'admin@example.com')->first()->roles()->attach($admin_role->id);
 
         // create permissions table
         Schema::create('permissions', function (Blueprint $table) {

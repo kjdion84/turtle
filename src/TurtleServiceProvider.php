@@ -2,7 +2,6 @@
 
 namespace Kjdion84\Turtle;
 
-use App\User;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
@@ -21,22 +20,21 @@ class TurtleServiceProvider extends ServiceProvider
 
         // migrations
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->publishes([__DIR__ . '/../database/migrations' => database_path('migrations')], 'migrations');
 
         // views
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'turtle');
-        $this->publishes([__DIR__ . '/../resources/views/layouts/app.blade.php' => resource_path('views/kjdion84/turtle/layouts/app.blade.php')], 'required');
-        $this->publishes([__DIR__ . '/../resources/views' => resource_path('views/kjdion84/turtle')], 'views');
+        $this->publishes([__DIR__ . '/../resources/views/layouts/app.blade.php' => resource_path('views/vendor/turtle/layouts/app.blade.php')], 'required');
+        $this->publishes([__DIR__ . '/../resources/views' => resource_path('views/vendor/turtle')], 'views');
 
         // assets
-        $this->publishes([__DIR__ . '/../public' => public_path('kjdion84/turtle')], 'required');
-        $this->publishes([__DIR__ . '/../public' => public_path('kjdion84/turtle')], 'public');
+        $this->publishes([__DIR__ . '/../public' => public_path('turtle')], 'required');
+        $this->publishes([__DIR__ . '/../public' => public_path('turtle')], 'public');
 
         // allow middleware
         $this->app['router']->aliasMiddleware('allow', 'Kjdion84\Turtle\Middleware\Allow');
 
         // gate permissions
-        Gate::before(function (User $user, $permission) {
+        Gate::before(function ($user, $permission) {
             if ($user->hasPermission($permission)) {
                 return true;
             }

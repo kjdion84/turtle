@@ -29,6 +29,7 @@ return [
         'activity' => 'Kjdion84\Turtle\Models\Activity',
         'permission' => 'Kjdion84\Turtle\Models\Permission',
         'role' => 'Kjdion84\Turtle\Models\Role',
+        'user' => 'App\User',
     ],
 
 ];

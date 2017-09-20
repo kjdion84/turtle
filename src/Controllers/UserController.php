@@ -3,7 +3,6 @@
 namespace Kjdion84\Turtle\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\User;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -28,7 +27,7 @@ class UserController extends Controller
     // users index datatable
     public function indexDatatable()
     {
-        $datatable = datatables()->of(User::with('roles')->get());
+        $datatable = datatables()->of(app(config('turtle.models.user'))->with('roles')->get());
         $datatable->editColumn('roles', function ($user) {
             return $user->roles->sortBy('name')->pluck('name')->implode(', ');
         });
@@ -55,7 +54,7 @@ class UserController extends Controller
         ]);
 
         request()->merge(['password' => Hash::make(request()->input('password'))]);
-        $user = User::create(request()->all());
+        $user = app(config('turtle.models.user'))->create(request()->all());
         $user->roles()->sync(request()->input('roles'));
 
         activity('Created User', $user);
@@ -70,7 +69,7 @@ class UserController extends Controller
     // show update user profile modal
     public function updateModal($id)
     {
-        $user = User::findOrFail($id);
+        $user = app(config('turtle.models.user'))->findOrFail($id);
         $roles = app(config('turtle.models.role'))->get()->sortBy('name');
 
         return view('turtle::users.update', compact('user', 'roles'));
@@ -85,7 +84,7 @@ class UserController extends Controller
             'timezone' => 'required|in:' . implode(',', timezone_identifiers_list()),
         ]);
 
-        $user = User::findOrFail($id);
+        $user = app(config('turtle.models.user'))->findOrFail($id);
         $user->update(request()->all());
         $user->roles()->sync(request()->input('roles'));
 
@@ -101,7 +100,7 @@ class UserController extends Controller
     // show change user password modal
     public function passwordModal($id)
     {
-        $user = User::findOrFail($id);
+        $user = app(config('turtle.models.user'))->findOrFail($id);
 
         return view('turtle::users.password', compact('user'));
     }
@@ -113,7 +112,7 @@ class UserController extends Controller
             'password' => 'required|confirmed',
         ]);
 
-        $user = User::findOrFail($id);
+        $user = app(config('turtle.models.user'))->findOrFail($id);
         $user->update(['password' => Hash::make(request()->input('password'))]);
 
         activity('Changed User Password', $user);
@@ -131,7 +130,7 @@ class UserController extends Controller
             'id' => 'required',
         ]);
 
-        $user = User::findOrFail(request()->input('id'));
+        $user = app(config('turtle.models.user'))->findOrFail(request()->input('id'));
         $user->delete();
 
         activity('Deleted User', $user);
@@ -146,7 +145,7 @@ class UserController extends Controller
     // user activity with table
     public function activity($id)
     {
-        $user = User::findOrFail($id);
+        $user = app(config('turtle.models.user'))->findOrFail($id);
 
         return view('turtle::users.activity', compact('user'));
     }
@@ -161,7 +160,7 @@ class UserController extends Controller
     public function activityDataModal($id)
     {
         $activity = app(config('turtle.models.activity'))->findOrFail($id);
-        $user = User::find($activity->user_id);
+        $user = app(config('turtle.models.user'))->find($activity->user_id);
         $model = $activity->model_class ? app($activity->model_class)->find($activity->model_id) : null;
 
         return view('turtle::users.activity-data', compact('activity', 'user', 'model'));

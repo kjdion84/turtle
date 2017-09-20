@@ -21,7 +21,7 @@ Turtle is a Laravel 5.5 package with front & backend scaffolding including a CRU
 ## Require via Composer
 
 ```
-composer require kjdion84/turtle:"~1.0"
+composer require kjdion84/turtle:"~1.1"
 ```
 
 ## Publish Required Files
@@ -34,8 +34,8 @@ This will create the following files:
 
 ```
 config/turtle.php
-resources/views/kjdion84/turtle/layouts/app.blade.php
-public/kjdion84/turtle/*.*
+resources/views/vendor/turtle/layouts/app.blade.php
+public/turtle/*.*
 ```
 
 ## Auto-Publish Public Assets After Updates
@@ -54,7 +54,7 @@ This will ensure the public assets are updated when you run `composer update`.
 
 ## Modify Existing Files
 
-Add the `LikesPizza` trait & `timezone` fillable to `App\User` e.g.:
+Add the `LikesPizza` trait & `timezone` fillable to your Auth `User` model e.g.:
 
 ```
 use Notifiable, LikesPizza;
@@ -93,19 +93,19 @@ public function render($request, Exception $exception)
 
 ## Config & Migrate
 
-Make sure your database and SMTP server is configured in your `.env` file, then migrate:
-
-```
-php artisan migrate
-```
-
-If you get a string length error, add `Schema::defaultStringLength(191)` to the boot method of `App\Providers\AppServiceProvider` e.g.:
+If you get a string length error when migrating, add `Schema::defaultStringLength(191)` to the `boot()` method of `App\Providers\AppServiceProvider` e.g.:
 
 ```
 public function boot()
 {
     Schema::defaultStringLength(191);
 }
+```
+
+Make sure your database and SMTP server is configured in your `.env` file, then migrate:
+
+```
+php artisan migrate
 ```
 
 ## Remove Default `/` & Auth Routes
@@ -138,19 +138,13 @@ You can remove the `app\Http\Controllers\Auth` folder and the `resources/views/w
 
 ## Optional Publishing
 
-Need a bit more control? No problem.
-
-You can publish all of the migrations to `database/migrations/*.*` with:
-
-```
-php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="migrations"
-```
-
-You can publish all of the views to `resources/views/kjdion84/turtle/*.*` with:
+You can publish all of the views to `resources/views/vendor/turtle/*.*` with:
 
 ```
 php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="views"
 ```
+
+Now you can customize your views without having to extend the package controllers.
 
 # Configuration
 
@@ -254,7 +248,7 @@ Use the paths array to define exactly which paths you want the generator to use 
 * `controller`: the folder used for the generated controller e.g. `app/Http/Controllers`
 * `model`: the folder used for the generated model e.g. `app`
 * `views`: the folder used for the generated views e.g. `resources/views`
-* `navbar`: the file containing the `<!-- crud_navbar -->` hook which the menu item is placed under e.g. `resources/views/kjdion84/turtle/layouts/app.blade.php`
+* `navbar`: the file containing the `<!-- crud_navbar -->` hook which the menu item is placed under e.g. `resources/views/vendor/turtle/layouts/app.blade.php`
 * `routes`: the file which generated routes will be appended to e.g. `routes/web.php`
 
 #### Attributes

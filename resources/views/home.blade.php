@@ -1,4 +1,4 @@
-@extends('kjdion84.turtle.layouts.app')
+@extends('turtle::layouts.app')
 
 @section('title', 'Home')
 @section('content')
