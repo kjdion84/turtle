@@ -21,7 +21,7 @@ Turtle is a Laravel 5.5 package with front & backend scaffolding including a BRE
 ## Require via Composer
 
 ```
-composer require kjdion84/turtle:"~1.1"
+composer require kjdion84/turtle:"~1.2"
 ```
 
 ## Publish Required Files
