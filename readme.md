@@ -2,7 +2,7 @@
 
 # Turtle
 
-Turtle is a Laravel 5.5 package with front & backend scaffolding including a CRUD generator, auth integration, roles, permissions, contact forms, reCAPTCHA, activity logs, demo mode, user timezones, AJAX CRUD/validation, Bootstrap 4, DataTables, & more!
+Turtle is a Laravel 5.5 package with front & backend scaffolding including a BREAD generator, auth integration, roles, permissions, contact forms, reCAPTCHA, activity logs, demo mode, user timezones, AJAX BREAD/validation, Bootstrap 4, DataTables, & more!
 
 ## Useful Links
 
@@ -179,13 +179,13 @@ You must enter your reCAPTCHA keys in order for reCAPTCHA to display in the regi
 Flashes a message to the session which will display on the next request via a Bootstrap 4 alert.
 
 * `$class`: the Bootstrap 4 `alert-` class to use e.g. `success`
-* `$message`: the message to display in the alert e.g. `User updated!`
+* `$message`: the message to display in the alert e.g. `User edited!`
 
 ### `activity($log, $model = null)`
 
 Logs a new activity in the database via the `Activity` model.
 
-* `$log`: the message to log e.g. `Updated User`
+* `$log`: the message to log e.g. `Edited User`
 * `$model`: the model the activity is being performed on e.g. `App\User`
 
 `$model` is optional. Also, this helper function automatically saves request input data, with the exception of `_method`, `_token`, `current_password`, `password`, `password_confirmation`, and `g-recaptcha-response`.
@@ -210,55 +210,56 @@ This is similar to Laravels `validate()` method, but it will totally stop an act
 
 ### Responses
 
-The package controller methods return a JSON response for CRUD operations. This is due to the form validation AJAX. Each JSON key you return has a specific function:
+The package controller methods return a JSON response for BREAD operations. This is due to the form validation AJAX. Each JSON key you return has a specific function:
 
 * `redirect`: redirects user to specified URL e.g. `'redirect' => route('index')`
-* `flash`: flashes alert briefly using bs4 class e.g. `'flash' => ['success', 'User created!']`
+* `flash`: flashes alert briefly using bs4 class e.g. `'flash' => ['success', 'User added!']`
 * `dismiss_modal`: closes the current model the form is in
 * `reload_page`: reloads the current location
 * `reload_datatables`: reloads datatables on the page to display new/updated data
+* `reload_sources`: reloads element contents with the GET data from their `data-source` attribute
 
-## CRUD Command
+## BREAD Command
 
-Use `php artisan make:crud {file}` to generate CRUD files e.g.:
+Use `php artisan make:bread {file}` to generate bread files e.g.:
 
 ```
-php artisan make:crud resources/crud/MyModel.php
+php artisan make:bread resources/bread/MyModel.php
 ```
 
 This will generate a controller, model, migration, views, add a navbar menu item, and routes.
 
-You must make sure you create a `resources/crud/MyModel.php` file before running the command, where `MyModel` is the name of the model you want to generate. This model file will contain all of the path & attribute definitions for the model. Check out `vendor/kjdion84/turtle/resources/crud/UsedCar.php` for an example, or publish the example using:
+You must make sure you create a `resources/bread/MyModel.php` file before running the command, where `MyModel` is the name of the model you want to generate. This model file will contain all of the path & attribute definitions for the model. Check out `vendor/kjdion84/turtle/resources/bread/UsedCar.php` for an example, or publish the example using:
 
 ```
-php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="crud_example"
+php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="bread_example"
 ```
 
-This will create `resources/crud/UsedCar.php`.
+This will create `resources/bread/UsedCar.php`.
 
 ### Model Path & Attribute Definitions
 
-The CRUD command requires you to specify model paths & attributes via a PHP file.
+The BREAD command requires you to specify model paths & attributes via a PHP file.
 
 #### Paths
 
 Use the paths array to define exactly which paths you want the generator to use for the model:
 
-* `stubs`: the stub template folder to be used when generating e.g. `resources/crud/stubs/mytemplate`
+* `stubs`: the stub template folder to be used when generating e.g. `resources/bread/stubs/mytemplate`
 * `controller`: the folder used for the generated controller e.g. `app/Http/Controllers`
 * `model`: the folder used for the generated model e.g. `app`
 * `views`: the folder used for the generated views e.g. `resources/views`
-* `navbar`: the file containing the `<!-- crud_navbar -->` hook which the menu item is placed under e.g. `resources/views/vendor/turtle/layouts/app.blade.php`
+* `navbar`: the file containing the `<!-- bread_navbar -->` hook which the menu item is placed under e.g. `resources/views/vendor/turtle/layouts/app.blade.php`
 * `routes`: the file which generated routes will be appended to e.g. `routes/web.php`
 
 #### Attributes
 
 Attributes are specified in a key value pair, where the key is the name of the attribute and the value is its options. The following options are available per attribute:
 
-* `schema`: methods used for the migration column e.g. `string("crud_attribute_name")->nullable()`
+* `schema`: methods used for the migration column e.g. `string("bread_attribute_name")->nullable()`
 * `input`: input type for forms which can be `text`, `password`, `email`, `number`, `tel`, `url`, `radio`, `checkbox`, `select`, or `textarea`
-* `rule_create`: rules used for creating by the controller e.g. `required|unique:crud_model_variables`
-* `rule_update`: rules used for updating by the controller e.g. `required|unique:crud_model_variables,crud_attribute_name,$id` (note `$id`, this is a variable injected into the controller method)
+* `rule_add`: rules used for creating by the controller e.g. `required|unique:bread_model_variables`
+* `rule_edit`: rules used for updating by the controller e.g. `required|unique:bread_model_variables,bread_attribute_name,$id` (note `$id`, this is a variable injected into the controller method)
 * `datatable`: enable/disable showing this attribute in DataTables (boolean)
 
 You can also completely remove any option you do not want to use per attribute.
@@ -267,36 +268,36 @@ You can also completely remove any option you do not want to use per attribute.
 
 There are a number of replacement strings you will see in the stub template files and even the `UsedCar.php` example file:
 
-* `crud_attribute_name`: current attribute name e.g. `post_title`
-* `crud_attribute_label`: current attribute label (automatically created using the attribute name) e.g. `Post Title`
-* `crud_attribute_schema`: current attribute schema e.g. `string("crud_attribute_name")->nullable()`
-* `crud_attribute_input`: current attribute input e.g. `textarea`
-* `crud_attribute_rule_create`: current attribute create rule e.g. `required|unique:crud_model_variables`
-* `crud_attribute_rule_update`: current attribute update rule e.g. `required|unique:crud_model_variables,crud_attribute_name,$id`
-* `crud_attribute_datatable`: show this attribute in datatables? boolean value e.g. `true`
-* `crud_model_class`: model class name e.g. `BlogPost`
-* `crud_model_variables`: plural model variable name e.g. `blog_posts`
-* `crud_model_variable`: singular model variable name e.g. `blog_post`
-* `crud_model_strings`: plural model title name e.g. `Blog Posts`
-* `crud_model_string`: singular model title name e.g. `Blog Post`
-* `/* crud_model_namespace */`: model namespace line e.g. `namespace App\BlogPost;`
-* `/* crud_model_use */`: model use line e.g. `use App\BlogPost;`
-* `crud_controller_class`: controller class name e.g. `BlogPostController`
-* `crud_controller_view`: view path used by controller methods e.g. `blog_posts.`
-* `crud_controller_routes`: controller path for routes e.g. `Backend\BlogPostController`
-* `/* crud_controller_namespace */`: controller namespace line e.g. `namespace App\Http\Controllers;`
+* `bread_attribute_name`: current attribute name e.g. `post_title`
+* `bread_attribute_label`: current attribute label (automatically created using the attribute name) e.g. `Post Title`
+* `bread_attribute_schema`: current attribute schema e.g. `string("bread_attribute_name")->nullable()`
+* `bread_attribute_input`: current attribute input e.g. `textarea`
+* `bread_attribute_rule_add`: current attribute create rule e.g. `required|unique:bread_model_variables`
+* `bread_attribute_rule_edit`: current attribute update rule e.g. `required|unique:bread_model_variables,bread_attribute_name,$id`
+* `bread_attribute_datatable`: show this attribute in datatables? boolean value e.g. `true`
+* `bread_model_class`: model class name e.g. `BlogPost`
+* `bread_model_variables`: plural model variable name e.g. `blog_posts`
+* `bread_model_variable`: singular model variable name e.g. `blog_post`
+* `bread_model_strings`: plural model title name e.g. `Blog Posts`
+* `bread_model_string`: singular model title name e.g. `Blog Post`
+* `/* bread_model_namespace */`: model namespace line e.g. `namespace App\BlogPost;`
+* `/* bread_model_use */`: model use line e.g. `use App\BlogPost;`
+* `bread_controller_class`: controller class name e.g. `BlogPostController`
+* `bread_controller_view`: view path used by controller methods e.g. `blog_posts.`
+* `bread_controller_routes`: controller path for routes e.g. `Backend\BlogPostController`
+* `/* bread_controller_namespace */`: controller namespace line e.g. `namespace App\Http\Controllers;`
 
 You can use any of these replacement strings inside of the stub templates or model attribute definition files you create.
 
 ### Custom Stub Templates
 
-You can easily publish the default stub folder to `resources/crud/stubs/default` with:
+You can easily publish the default stub folder to `resources/bread/stubs/default` with:
 
 ```
-php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="crud_stubs"
+php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="bread_stubs"
 ```
 
-After doing so, simply rename the folder `default` to whatever you want. Now you can modify it to your hearts desires. Just make sure you specify the full path to this new folder in the `paths.stubs` value for any CRUD model file you want to use it.
+After doing so, simply rename the folder `default` to whatever you want. Now you can modify it to your hearts desires. Just make sure you specify the full path to this new folder in the `paths.stubs` value for any BREAD model file you want to use it.
 
 # Issues & Support
 

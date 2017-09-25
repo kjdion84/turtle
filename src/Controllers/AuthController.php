@@ -80,7 +80,6 @@ class AuthController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed',
-            'timezone' => 'required|in:' . implode(',', timezone_identifiers_list()),
             'g-recaptcha-response' => 'sometimes|recaptcha',
         ]);
 
@@ -95,13 +94,13 @@ class AuthController extends Controller
         return response()->json(['redirect' => route('index')]);
     }
 
-    // show profile update form
+    // show profile edit form
     public function profileForm()
     {
         return view('turtle::auth.profile');
     }
 
-    // update profile
+    // edit profile
     public function profile()
     {
         $this->shellshock(request(), [
@@ -112,8 +111,8 @@ class AuthController extends Controller
 
         auth()->user()->update(request()->all());
 
-        activity('Updated Profile');
-        flash('success', 'Profile updated!');
+        activity('Edited Profile');
+        flash('success', 'Profile edited!');
 
         return response()->json(['reload_page' => true]);
     }

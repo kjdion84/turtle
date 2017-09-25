@@ -46,14 +46,14 @@ class TurtleServiceProvider extends ServiceProvider
         // blade directives
         $this->bladeDirectives();
 
-        // crud command
+        // bread command
         if ($this->app->runningInConsole()) {
-            $this->commands([Commands\CrudCommand::class]);
+            $this->commands([Commands\BreadConmmand::class]);
         }
 
-        // crud resources
-        $this->publishes([__DIR__ . '/../resources/crud/UsedCar.php' => resource_path('crud/UsedCar.php')], 'crud_example');
-        $this->publishes([__DIR__ . '/../resources/crud/stubs' => resource_path('crud/stubs/default')], 'crud_stubs');
+        // bread resources
+        $this->publishes([__DIR__ . '/../resources/bread/UsedCar.php' => resource_path('bread/UsedCar.php')], 'bread_example');
+        $this->publishes([__DIR__ . '/../resources/bread/stubs' => resource_path('bread/stubs/default')], 'bread_stubs');
     }
 
     public function register()

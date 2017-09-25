@@ -1,5 +1,5 @@
 <div class="modal modal-ajax" tabindex="-1" data-backdrop="static">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">@yield('title')</h5>

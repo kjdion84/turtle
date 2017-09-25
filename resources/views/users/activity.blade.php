@@ -30,7 +30,9 @@
                         render: function (data, type, full) {
                             var actions = '';
 
-                            actions += ' <button type="button" class="btn btn-primary btn-icon" data-modal="{{ route('users.activity.data', ':id') }}" data-toggle="tooltip" title="Data"><i class="fa fa-database"></i></button> ';
+                            @can('Read Activities')
+                                actions += ' <button type="button" class="btn btn-primary btn-icon" data-modal="{{ route('users.activity.data', ':id') }}" data-toggle="tooltip" title="Data"><i class="fa fa-database"></i></button> ';
+                            @endcan
 
                             return actions.replace(/:id/g, full.id);
                         }

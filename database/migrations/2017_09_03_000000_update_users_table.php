@@ -13,7 +13,7 @@ class UpdateUsersTable extends Migration
             $table->string('timezone')->default(config('app.timezone'));
         });
 
-        // create admin user
+        // add admin user
         app(config('turtle.models.user'))->create(['name' => 'Admin', 'email' => 'admin@example.com', 'password' => Hash::make('admin123')]);
     }
 

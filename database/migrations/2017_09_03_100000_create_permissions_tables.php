@@ -15,7 +15,7 @@ class CreatePermissionsTables extends Migration
             $table->timestamps();
         });
 
-        // create admin role
+        // add admin role
         $admin_role = app(config('turtle.models.role'))->create(['name' => 'Admin']);
 
         // create role user relation table
@@ -49,14 +49,16 @@ class CreatePermissionsTables extends Migration
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
         });
 
-        // create user & role permissions
-        app(config('turtle.models.permission'))->create(['group' => 'Users', 'name' => 'View Users']);
-        app(config('turtle.models.permission'))->create(['group' => 'Users', 'name' => 'Create Users']);
-        app(config('turtle.models.permission'))->create(['group' => 'Users', 'name' => 'Update Users']);
+        // add user & role permissions
+        app(config('turtle.models.permission'))->create(['group' => 'Users', 'name' => 'Browse Users']);
+        app(config('turtle.models.permission'))->create(['group' => 'Users', 'name' => 'Read Users']);
+        app(config('turtle.models.permission'))->create(['group' => 'Users', 'name' => 'Edit Users']);
+        app(config('turtle.models.permission'))->create(['group' => 'Users', 'name' => 'Add Users']);
         app(config('turtle.models.permission'))->create(['group' => 'Users', 'name' => 'Delete Users']);
-        app(config('turtle.models.permission'))->create(['group' => 'Roles', 'name' => 'View Roles']);
-        app(config('turtle.models.permission'))->create(['group' => 'Roles', 'name' => 'Create Roles']);
-        app(config('turtle.models.permission'))->create(['group' => 'Roles', 'name' => 'Update Roles']);
+        app(config('turtle.models.permission'))->create(['group' => 'Roles', 'name' => 'Browse Roles']);
+        app(config('turtle.models.permission'))->create(['group' => 'Roles', 'name' => 'Read Roles']);
+        app(config('turtle.models.permission'))->create(['group' => 'Roles', 'name' => 'Edit Roles']);
+        app(config('turtle.models.permission'))->create(['group' => 'Roles', 'name' => 'Add Roles']);
         app(config('turtle.models.permission'))->create(['group' => 'Roles', 'name' => 'Delete Roles']);
     }
 

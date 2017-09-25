@@ -11,11 +11,12 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('can:View Users')->only(['index', 'indexDatatable']);
-        $this->middleware('can:Create Users')->only(['createModal', 'create']);
-        $this->middleware('can:Update Users')->only(['updateModal', 'update', 'passwordModal', 'password']);
+        $this->middleware('can:Browse Users')->only(['index', 'indexDatatable']);
+        $this->middleware('can:Add Users')->only(['addModal', 'add']);
+        $this->middleware('can:Edit Users')->only(['editModal', 'edit', 'passwordModal', 'password']);
         $this->middleware('can:Delete Users')->only('delete');
-        $this->middleware('can:View Activities')->only('activity', 'activityDatatable', 'activityDataModal');
+        $this->middleware('can:Browse Activities')->only('activity', 'activityDatatable');
+        $this->middleware('can:Read Activities')->only('activityDataModal');
     }
 
     // users index with table
@@ -35,16 +36,16 @@ class UserController extends Controller
         return $datatable->toJson();
     }
 
-    // show create user modal
-    public function createModal()
+    // show add user modal
+    public function addModal()
     {
         $roles = app(config('turtle.models.role'))->get()->sortBy('name');
 
-        return view('turtle::users.create', compact('roles'));
+        return view('turtle::users.add', compact('roles'));
     }
 
-    // create user
-    public function create()
+    // add user
+    public function add()
     {
         $this->shellshock(request(), [
             'name' => 'required',
@@ -57,26 +58,26 @@ class UserController extends Controller
         $user = app(config('turtle.models.user'))->create(request()->all());
         $user->roles()->sync(request()->input('roles'));
 
-        activity('Created User', $user);
+        activity('Added User', $user);
 
         return response()->json([
-            'flash' => ['success', 'User created!'],
+            'flash' => ['success', 'User added!'],
             'dismiss_modal' => true,
             'reload_datatables' => true,
         ]);
     }
 
-    // show update user profile modal
-    public function updateModal($id)
+    // show edit user modal
+    public function editModal($id)
     {
         $user = app(config('turtle.models.user'))->findOrFail($id);
         $roles = app(config('turtle.models.role'))->get()->sortBy('name');
 
-        return view('turtle::users.update', compact('user', 'roles'));
+        return view('turtle::users.edit', compact('user', 'roles'));
     }
 
-    // update user profile
-    public function update($id)
+    // edit user
+    public function edit($id)
     {
         $this->shellshock(request(), [
             'name' => 'required',
@@ -88,10 +89,10 @@ class UserController extends Controller
         $user->update(request()->all());
         $user->roles()->sync(request()->input('roles'));
 
-        activity('Updated User Profile', $user);
+        activity('Edited User', $user);
 
         return response()->json([
-            'flash' => ['success', 'User profile updated!'],
+            'flash' => ['success', 'User edited!'],
             'dismiss_modal' => true,
             'reload_datatables' => true,
         ]);

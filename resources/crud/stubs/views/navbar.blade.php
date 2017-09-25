@@ -1,1 +1,0 @@
-                    @can('View crud_model_strings')<li class="nav-item{{ request()->is('crud_model_variables') ?  ' active' : '' }}"><a class="nav-link" href="{{ route('crud_model_variables') }}">crud_model_strings</a></li>@endcan

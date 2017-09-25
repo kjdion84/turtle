@@ -9,9 +9,9 @@ class RoleController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('can:View Roles')->only(['index', 'indexDatatable']);
-        $this->middleware('can:Create Roles')->only(['createModal', 'create']);
-        $this->middleware('can:Update Roles')->only(['updateModal', 'update']);
+        $this->middleware('can:Browse Roles')->only(['index', 'indexDatatable']);
+        $this->middleware('can:Add Roles')->only(['addModal', 'add']);
+        $this->middleware('can:Edit Roles')->only(['editModal', 'edit']);
         $this->middleware('can:Delete Roles')->only('delete');
     }
 
@@ -27,16 +27,16 @@ class RoleController extends Controller
         return datatables()->of(app(config('turtle.models.role'))->query())->toJson();
     }
 
-    // show create role modal
-    public function createModal()
+    // show add role modal
+    public function addModal()
     {
         $group_permissions = app(config('turtle.models.permission'))->orderBy('group', 'asc')->orderBy('id', 'asc')->get()->groupBy('group');
 
-        return view('turtle::roles.create', compact('group_permissions'));
+        return view('turtle::roles.add', compact('group_permissions'));
     }
 
-    // create role
-    public function create()
+    // add role
+    public function add()
     {
         $this->shellshock(request(), [
             'name' => 'required|unique:roles',
@@ -45,26 +45,26 @@ class RoleController extends Controller
         $role = app(config('turtle.models.role'))->create(request()->all());
         $role->permissions()->sync(request()->input('permissions'));
 
-        activity('Created Role', $role);
+        activity('Added Role', $role);
 
         return response()->json([
-            'flash' => ['success', 'Role created!'],
+            'flash' => ['success', 'Role added!'],
             'dismiss_modal' => true,
             'reload_datatables' => true,
         ]);
     }
 
-    // show update role modal
-    public function updateModal($id)
+    // show edit role modal
+    public function editModal($id)
     {
         $role = app(config('turtle.models.role'))->findOrFail($id);
         $group_permissions = app(config('turtle.models.permission'))->orderBy('group', 'asc')->orderBy('id', 'asc')->get()->groupBy('group');
 
-        return view('turtle::roles.update', compact('role', 'group_permissions'));
+        return view('turtle::roles.edit', compact('role', 'group_permissions'));
     }
 
-    // update role
-    public function update($id)
+    // edit role
+    public function edit($id)
     {
         $this->shellshock(request(), [
             'name' => 'required|unique:roles,name,' . $id,
@@ -74,10 +74,10 @@ class RoleController extends Controller
         $role->update(request()->all());
         $role->permissions()->sync(request()->input('permissions'));
 
-        activity('Updated Role', $role);
+        activity('Edited Role', $role);
 
         return response()->json([
-            'flash' => ['success', 'Role updated!'],
+            'flash' => ['success', 'Role edited!'],
             'dismiss_modal' => true,
             'reload_datatables' => true,
         ]);

@@ -69,6 +69,13 @@ footer {
     color: #dc3545;
 }
 
+/* xl modal */
+@media (min-width: 992px) {
+    .modal-xl {
+        max-width: 1100px;
+    }
+}
+
 /* datatable styles */
 .dataTables_wrapper {
     padding: 0;

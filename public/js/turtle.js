@@ -130,6 +130,15 @@ $(document).ready(function () {
                     if (data.hasOwnProperty('reload_datatables')) {
                         $($.fn.dataTable.tables()).DataTable().ajax.reload();
                     }
+
+                    // reload sources
+                    if (data.hasOwnProperty('reload_sources')) {
+                        $('[data-source]').each(function () {
+                            $.get($(this).data('source'), function (data) {
+                                $(this).html(data);
+                            });
+                        });
+                    }
                 },
                 error: function (data) {
                     var element;

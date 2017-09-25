@@ -27,19 +27,19 @@ Route::group(['middleware' => 'web'], function () {
     // role routes
     Route::get('roles', config('turtle.controllers.role') . '@index')->name('roles');
     Route::get('roles/datatable', config('turtle.controllers.role') . '@indexDatatable')->name('roles.datatable');
-    Route::get('roles/create', config('turtle.controllers.role') . '@createModal')->name('roles.create');
-    Route::post('roles/create', config('turtle.controllers.role') . '@create');
-    Route::get('roles/update/{id}', config('turtle.controllers.role') . '@updateModal')->name('roles.update');
-    Route::patch('roles/update/{id}', config('turtle.controllers.role') . '@update');
+    Route::get('roles/add', config('turtle.controllers.role') . '@addModal')->name('roles.add');
+    Route::post('roles/add', config('turtle.controllers.role') . '@add');
+    Route::get('roles/edit/{id}', config('turtle.controllers.role') . '@editModal')->name('roles.edit');
+    Route::patch('roles/edit/{id}', config('turtle.controllers.role') . '@edit');
     Route::delete('roles/delete', config('turtle.controllers.role') . '@delete')->name('roles.delete');
 
     // user routes
     Route::get('users', config('turtle.controllers.user') . '@index')->name('users');
     Route::get('users/datatable', config('turtle.controllers.user') . '@indexDatatable')->name('users.datatable');
-    Route::get('users/create', config('turtle.controllers.user') . '@createModal')->name('users.create');
-    Route::post('users/create', config('turtle.controllers.user') . '@create');
-    Route::get('users/update/{id}', config('turtle.controllers.user') . '@updateModal')->name('users.update');
-    Route::patch('users/update/{id}', config('turtle.controllers.user') . '@update');
+    Route::get('users/add', config('turtle.controllers.user') . '@addModal')->name('users.add');
+    Route::post('users/add', config('turtle.controllers.user') . '@add');
+    Route::get('users/edit/{id}', config('turtle.controllers.user') . '@editModal')->name('users.edit');
+    Route::patch('users/edit/{id}', config('turtle.controllers.user') . '@edit');
     Route::get('users/password/{id}', config('turtle.controllers.user') . '@passwordModal')->name('users.password');
     Route::patch('users/password/{id}', config('turtle.controllers.user') . '@password');
     Route::delete('users/delete', config('turtle.controllers.user') . '@delete')->name('users.delete');

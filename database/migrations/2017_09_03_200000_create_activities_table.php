@@ -21,8 +21,9 @@ class CreateActivitiesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
-        // create permissions
-        app(config('turtle.models.permission'))->create(['group' => 'Activities', 'name' => 'View Activities']);
+        // add permissions
+        app(config('turtle.models.permission'))->create(['group' => 'Activities', 'name' => 'Browse Activities']);
+        app(config('turtle.models.permission'))->create(['group' => 'Activities', 'name' => 'Read Activities']);
     }
 
     public function down()

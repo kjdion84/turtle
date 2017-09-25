@@ -35,20 +35,24 @@
                     @endif
                 @else
                     <li class="nav-item{{ request()->is('dashboard') ?  ' active' : '' }}"><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <!-- crud_navbar -->
-                    @canany('View Roles', 'View Users')
+                    <!-- bread_navbar -->
+                    @canany('Browse Roles', 'Browse Users')
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Manage</a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                @can('View Roles')<a class="dropdown-item{{ request()->is('roles') ?  ' active' : '' }}" href="{{ route('roles') }}">Roles</a>@endcan
-                                @can('View Users')<a class="dropdown-item{{ request()->is('users') ?  ' active' : '' }}" href="{{ route('users') }}">Users</a>@endcan
+                                @can('Browse Roles')
+                                    <a class="dropdown-item{{ request()->is('roles') ?  ' active' : '' }}" href="{{ route('roles') }}">Roles</a>
+                                @endcan
+                                @can('Browse Users')
+                                    <a class="dropdown-item{{ request()->is('users') ?  ' active' : '' }}" href="{{ route('users') }}">Users</a>
+                                @endcan
                             </div>
                         </li>
                     @endcanany
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"><i class="fa fa-user-circle"></i> {{ auth()->user()->name }}</a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item{{ request()->is('profile') ?  ' active' : '' }}" href="{{ route('profile') }}">Update Profile</a>
+                            <a class="dropdown-item{{ request()->is('profile') ?  ' active' : '' }}" href="{{ route('profile') }}">Edit Profile</a>
                             <a class="dropdown-item{{ request()->is('password/change') ?  ' active' : '' }}" href="{{ route('password.change') }}">Change Password</a>
                             <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
                         </div>
