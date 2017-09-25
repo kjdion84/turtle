@@ -138,7 +138,7 @@ class AuthController extends Controller
                 $message->to($user->email);
             });
 
-            flash('success', 'Password reset link sent!');
+            flash('success', 'Password reset link emailed!');
 
             return response()->json(['reload_page' => true]);
         }

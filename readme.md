@@ -221,7 +221,7 @@ The package controller methods return a JSON response for BREAD operations. This
 
 ## BREAD Command
 
-Use `php artisan make:bread {file}` to generate bread files e.g.:
+Use `php artisan make:bread {file}` to generate BREAD files e.g.:
 
 ```
 php artisan make:bread resources/bread/MyModel.php
