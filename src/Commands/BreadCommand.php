@@ -6,7 +6,7 @@ use DirectoryIterator;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 
-class BreadConmmand extends Command
+class BreadCommand extends Command
 {
     protected $signature = 'make:bread {file}'; // php artisan make:bread resources/bread/UsedCar.php
     protected $description = 'Generate BREAD files.';

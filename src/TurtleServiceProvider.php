@@ -48,7 +48,7 @@ class TurtleServiceProvider extends ServiceProvider
 
         // bread command
         if ($this->app->runningInConsole()) {
-            $this->commands([Commands\BreadConmmand::class]);
+            $this->commands([Commands\BreadCommand::class]);
         }
 
         // bread resources
