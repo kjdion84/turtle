@@ -198,13 +198,15 @@ $(document).ready(function () {
 
     // hide/show element based on select option
     $(document).on('change', '[data-hide-show]', function () {
-        var element = $($(this).data('hide-show'));
+        var select = $(this);
+        var element = $(select.data('hide-show'));
 
         element.addClass('d-none');
-
-        if ($(this).find('option:selected').data('show') === element.data('show')) {
-            element.removeClass('d-none');
-        }
+        element.each(function () {
+            if (select.find('option:selected').data('show') === $(this).data('show')) {
+                $(this).removeClass('d-none');
+            }
+        });
     });
 });
 
