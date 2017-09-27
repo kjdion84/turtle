@@ -195,6 +195,17 @@ $(document).ready(function () {
             $(this).prop('checked', false).change();
         });
     });
+
+    // hide/show element based on select option
+    $(document).on('change', '[data-hide-show]', function () {
+        var element = $($(this).data('hide-show'));
+
+        element.addClass('d-none');
+
+        if ($(this).find('option:selected').data('show') === element.data('show')) {
+            element.removeClass('d-none');
+        }
+    });
 });
 
 function flash(alert_class, alert_message) {
