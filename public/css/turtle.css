@@ -63,7 +63,7 @@ footer {
 }
 
 /* invalid feedback message */
-.is-invalid {
+div.is-invalid {
     color: #dc3545;
 }
 .is-invalid-message {
