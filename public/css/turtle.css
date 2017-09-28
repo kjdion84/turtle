@@ -63,6 +63,9 @@ footer {
 }
 
 /* invalid feedback message */
+.is-invalid {
+    color: #dc3545;
+}
 .is-invalid-message {
     margin-top: .25rem;
     font-size: .875rem;
