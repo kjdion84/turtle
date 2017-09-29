@@ -24,7 +24,7 @@ class RoleController extends Controller
     // roles index datatable
     public function indexDatatable()
     {
-        return datatables()->of(app(config('turtle.models.role'))->query())->toJson();
+        return datatables()->of(app(config('turtle.models.role'))->get())->toJson();
     }
 
     // show add role modal
