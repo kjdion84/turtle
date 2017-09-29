@@ -28,7 +28,7 @@ class UserController extends Controller
     // users index datatable
     public function indexDatatable()
     {
-        $datatable = datatables()->of(app(config('turtle.models.user'))->get());
+        $datatable = datatables()->of(app(config('turtle.models.user'))->with('roles')->get());
         $datatable->editColumn('roles', function ($user) {
             return $user->roles->sortBy('name')->pluck('name')->implode(', ');
         });
