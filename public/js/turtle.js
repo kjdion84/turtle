@@ -31,7 +31,7 @@ $.extend(true, $.fn.dataTable.defaults, {
     initComplete: function (settings, json) {
         var self = this.api();
         var filter_input = $('#' + settings.nTable.id + '_filter input').unbind();
-        var search_button = $('<button type="button" class="btn btn-dark btn-sm btn-icon ml-1 mb-1" data-toggle="tooltip" title="Search"><i class="fa fa-search"></i></button>').click(function () {
+        var search_button = $('<button type="button" class="btn btn-primary btn-sm btn-icon ml-1 mb-1" data-toggle="tooltip" title="Search"><i class="fa fa-search"></i></button>').click(function () {
             self.search(filter_input.val()).draw();
         });
         var reset_button = $('<button type="button" class="btn btn-light btn-sm btn-icon ml-1 mb-1" data-toggle="tooltip" title="Reset"><i class="fa fa-undo"></i></button>').click(function () {
