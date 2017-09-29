@@ -31,7 +31,7 @@ $.extend(true, $.fn.dataTable.defaults, {
     initComplete: function (settings, json) {
         var self = this.api();
         var filter_input = $('#' + settings.nTable.id + '_filter input').unbind();
-        var search_button = $('<button type="button" class="btn btn-primary btn-sm btn-icon ml-1 mb-1" data-toggle="tooltip" title="Search"><i class="fa fa-search"></i></button>').click(function () {
+        var search_button = $('<button type="button" class="btn btn-dark btn-sm btn-icon ml-1 mb-1" data-toggle="tooltip" title="Search"><i class="fa fa-search"></i></button>').click(function () {
             self.search(filter_input.val()).draw();
         });
         var reset_button = $('<button type="button" class="btn btn-light btn-sm btn-icon ml-1 mb-1" data-toggle="tooltip" title="Reset"><i class="fa fa-undo"></i></button>').click(function () {
@@ -111,7 +111,7 @@ $(document).ready(function () {
                         $(location).attr('href', data.redirect);
                     }
 
-                    // flash success message
+                    // flash message using class
                     if (data.hasOwnProperty('flash')) {
                         flash(data.flash[0], data.flash[1]);
                     }
@@ -130,33 +130,26 @@ $(document).ready(function () {
                     if (data.hasOwnProperty('reload_datatables')) {
                         $($.fn.dataTable.tables()).DataTable().ajax.reload();
                     }
-
-                    // reload sources
-                    if (data.hasOwnProperty('reload_sources')) {
-                        $('[data-source]').each(function () {
-                            $.get($(this).data('source'), function (data) {
-                                $(this).html(data);
-                            });
-                        });
-                    }
                 },
                 error: function (data) {
                     var element;
 
+                    // flash error message
+                    flash('danger', data.responseJSON.message);
+
                     // show error for each element
-                    $.each(data.responseJSON.errors, function (key, value) {
-                        element = (key === 'g-recaptcha-response') ? $('.g-recaptcha') : $('#' + key);
-                        element.addClass('is-invalid');
-                        element.after('<div class="is-invalid-message">' + value[0] + '</div>');
-                    });
+                    if (data.responseJSON.hasOwnProperty('errors')) {
+                        $.each(data.responseJSON.errors, function (key, value) {
+                            element = (key === 'g-recaptcha-response') ? $('.g-recaptcha') : $('#' + key);
+                            element.addClass('is-invalid');
+                            element.after('<div class="is-invalid-message">' + value[0] + '</div>');
+                        });
+                    }
 
                     // reset recaptcha if present
                     if (typeof grecaptcha !== 'undefined') {
                         grecaptcha.reset();
                     }
-
-                    // flash error message
-                    flash('danger', 'Errors have occurred.');
                 }
             });
         }
