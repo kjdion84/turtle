@@ -10,4 +10,9 @@ class Activity extends Model
     use InTime;
 
     protected $fillable = ['user_id', 'model_id', 'model_class', 'data', 'log'];
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }

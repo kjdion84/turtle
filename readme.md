@@ -54,7 +54,7 @@ This will ensure the public assets are updated when you run `composer update`.
 
 ## Modify Existing Files
 
-Add the `LikesPizza` trait & `timezone` fillable to your Auth `User` model e.g.:
+Import & add the `LikesPizza` trait & `timezone` fillable to your Auth `User` model e.g.:
 
 ```
 use Notifiable, LikesPizza;
@@ -64,7 +64,7 @@ protected $fillable = [
 ];
 ```
 
-Add the `Shellshock` trait to `App\Http\Controllers\Controller` e.g.:
+Import & add the `Shellshock` trait to `App\Http\Controllers\Controller` e.g.:
 
 ```
 use AuthorizesRequests, DispatchesJobs, ValidatesRequests, Shellshock;
