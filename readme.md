@@ -54,6 +54,11 @@ This will ensure the public assets are updated when you run `composer update`.
 
 ## Modify Existing Files
 
+Import the `LikesPizza` namespace to your Auth `User` model e.g.:
+```
+use Kjdion84\Turtle\Traits\LikesPizza;
+```
+
 Add the `LikesPizza` trait & `timezone` fillable to your Auth `User` model e.g.:
 
 ```
