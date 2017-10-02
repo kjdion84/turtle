@@ -140,7 +140,7 @@ $(document).ready(function () {
                     // show error for each element
                     if (data.responseJSON.hasOwnProperty('errors')) {
                         $.each(data.responseJSON.errors, function (key, value) {
-                            element = (key === 'g-recaptcha-response') ? $('.g-recaptcha') : $('#' + key);
+                            element = (key === 'g-recaptcha-response') ? $('.g-recaptcha') : $('#' + $.escapeSelector(key));
                             element.addClass('is-invalid');
                             element.after('<div class="is-invalid-message">' + value[0] + '</div>');
                         });
