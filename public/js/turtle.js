@@ -170,6 +170,13 @@ $(document).ready(function () {
         });
     });
 
+    // execute scripts in ajax modals
+    $(document).on('shown.bs.modal', '.modal-ajax', function () {
+        $(this).find('script').each(function(){
+            eval($(this).text());
+        });
+    });
+
     // remove ajax modal when hidden
     $(document).on('hidden.bs.modal', '.modal-ajax', function () {
         $(this).remove();
