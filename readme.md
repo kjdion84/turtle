@@ -217,7 +217,8 @@ The package controller methods return a JSON response for BREAD operations. This
 * `dismiss_modal`: closes the current model the form is in
 * `reload_page`: reloads the current location
 * `reload_datatables`: reloads datatables on the page to display new/updated data
-* `reload_sources`: reloads element contents with the GET data from their `data-source` attribute
+* `reload_target`: reloads target element using the specified selector and `reload_target_data` value e.g. `'reload_target' => '#my_target', 'reload_target_data' => view('my_view')->render()`
+* `reload_sources`: reloads the content of each `data-reload-source` element using the URL specified e.g. `<div data-reload-source="{{ route('my_source') }}"></div>`
 
 ## BREAD Command
 

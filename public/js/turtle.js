@@ -130,6 +130,21 @@ $(document).ready(function () {
                     if (data.hasOwnProperty('reload_datatables')) {
                         $($.fn.dataTable.tables()).DataTable().ajax.reload();
                     }
+
+                    // reload target with data
+                    if (data.hasOwnProperty('reload_target')) {
+                        $(data.reload_target).html(data.reload_target_data);
+                    }
+
+                    // reload sources with url
+                    if (data.hasOwnProperty('reload_sources')) {
+                        $('[data-reload-source]').each(function () {
+                            var reload_element = $(this);
+                            $.get(reload_element.data('reload-source'), function (data) {
+                                reload_element.html(data);
+                            });
+                        });
+                    }
                 },
                 error: function (data) {
                     var element;
