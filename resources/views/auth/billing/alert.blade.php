@@ -1,4 +1,4 @@
-@if(auth()->check() && auth()->user()->billable && config('turtle.allow.billing'))
+@if(auth()->check() && auth()->user()->billable && config('turtle.allow.billing') && !request()->is('billing'))
     @if(!auth()->user()->billing_plan && auth()->user()->billing_trial_ends > \Carbon\Carbon::now())
         <div class="container mt-4">
             <div class="alert alert-warning">
