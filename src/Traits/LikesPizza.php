@@ -18,6 +18,12 @@ trait LikesPizza
         return $this->hasMany(config('turtle.models.activity'));
     }
 
+    // billing relationship
+    public function billing()
+    {
+        return $this->hasMany(config('turtle.models.billing'));
+    }
+
     // gate permissions
     public function hasPermission($name)
     {

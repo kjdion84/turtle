@@ -1,3 +1,16 @@
+# 10/14/2017
+
+Oops, I hadn't been updating the changelog since the last subversion. Well, today I introduce yet another subversion. This subversion introduces user billing, which is fully integrated with Stripe! Now you can even use Turtle to create SaaS apps.
+
+Please see the readme for information on how to implement billing in your app.
+
+**Note: you will have to update your `app.blade.php` view and `turtle` config files. Please check out the 1.3 commit for change highlights in these files.**
+
+Changes in this release:
+
+* Added user billing
+* Updated Bootstrap assets, since they have resolved issues (e.g. dropdown text being cut off)
+
 # 9/25/2017
 
 Another subversion is being released. This introduces a few major changes to the CRUD generator, permissions, views, etc. After using Turtle for a number of my own projects I have found that CRUD is not sufficient enough, and confuses the end-user a bit. Therefore, after looking at Voyager, I've decided to change CRUD to BREAD. This is more clear to users ("add" is less confusing than "create"), and the additional "browse" permission is essential for separating browse/read concerns.

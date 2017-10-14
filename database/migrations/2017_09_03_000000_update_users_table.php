@@ -11,6 +11,13 @@ class UpdateUsersTable extends Migration
         // add timezone column to users table
         Schema::table('users', function (Blueprint $table) {
             $table->string('timezone')->default(config('app.timezone'));
+            $table->boolean('billable')->default(false);
+            $table->string('billing_customer')->nullable();
+            $table->string('billing_subscription')->nullable();
+            $table->string('billing_plan')->nullable();
+            $table->integer('billing_cc_last4')->nullable();
+            $table->timestamp('billing_trial_ends')->nullable();
+            $table->timestamp('billing_period_ends')->nullable();
         });
 
         // add admin user

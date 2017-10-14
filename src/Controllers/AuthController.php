@@ -3,22 +3,29 @@
 namespace Kjdion84\Turtle\Controllers;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use GrahamCampbell\Throttle\Facades\Throttle;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Stripe\Customer;
+use Stripe\Stripe;
+use Stripe\Subscription;
+use Stripe\Token;
 
 class AuthController extends Controller
 {
     public function __construct()
     {
         $this->middleware('guest')->only(['loginForm', 'login', 'registerForm', 'register', 'passwordEmailForm', 'passwordEmail', 'passwordResetForm', 'passwordReset']);
-        $this->middleware('auth')->only(['logout', 'profileForm', 'profile', 'passwordChangeForm', 'passwordChange']);
+        $this->middleware('auth')->only(['logout', 'profileForm', 'profile', 'passwordChangeForm', 'passwordChange', 'billing', 'billingPlanModal', 'billingPlan', 'billingCancelModal', 'billingCancel']);
         $this->middleware('allow:registration')->only(['registerForm', 'register']);
+        $this->middleware('allow:billing')->only(['billing', 'billingPlanModal', 'billingPlan', 'billingCancelModal', 'billingCancel', 'billingWebhook']);
     }
 
     // show login form
@@ -83,7 +90,17 @@ class AuthController extends Controller
             'g-recaptcha-response' => 'sometimes|recaptcha',
         ]);
 
+        // hash password
         request()->merge(['password' => Hash::make(request()->input('password'))]);
+
+        // set billing if allowed
+        if (config('turtle.allow.billing')) {
+            request()->merge([
+                'billable' => true,
+                'billing_trial_ends' => Carbon::createFromTimestamp(strtotime(config('turtle.billing.trial_period'))),
+            ]);
+        }
+
         $user = app(config('turtle.models.user'))->create(request()->all());
         event(new Registered($user));
         auth()->guard()->login($user);
@@ -205,5 +222,132 @@ class AuthController extends Controller
         else {
             return response()->json(['errors' => ['current_password' => [trans('auth.failed')]]], 422);
         }
+    }
+
+    // show billing
+    public function billing()
+    {
+        return view('turtle::auth.billing.index');
+    }
+
+    // show billing plan payment modal
+    public function billingPlanModal($key)
+    {
+        return view('turtle::auth.billing.plan', compact('key'));
+    }
+
+    // show billing plan payment modal
+    public function billingPlan($key)
+    {
+        $this->shellshock(request(), [
+            'number' => 'required|numeric',
+            'exp_month' => 'required|numeric',
+            'exp_year' => 'required|numeric',
+            'cvc' => 'required|numeric',
+        ]);
+
+        Stripe::setApiKey(config('turtle.billing.stripe_secret_key'));
+
+        // create card token
+        $token = Token::create([
+            'card' => [
+                'number' => request()->input('number'),
+                'exp_month' => request()->input('exp_month'),
+                'exp_year' => request()->input('exp_year'),
+                'cvc' => request()->input('cvc'),
+            ],
+        ]);
+
+        // create/update customer
+        if (!auth()->user()->billing_customer) {
+            $customer = Customer::create([
+                'source' => $token->id,
+                'email' => auth()->user()->email,
+            ]);
+        }
+        else {
+            $customer = Customer::retrieve(auth()->user()->billing_customer);
+            $customer->source = $token->id;
+            $customer->save();
+        }
+
+        // create/update subscription
+        if (!auth()->user()->billing_subscription) {
+            $subscription = Subscription::create([
+                'customer' => $customer->id,
+                'items' => [['plan' => $key]],
+            ]);
+        }
+        else {
+            $subscription = Subscription::retrieve(auth()->user()->billing_subscription);
+            Subscription::update($subscription->id, [
+                'items' => [[
+                    'id' => $subscription->items->data[0]->id,
+                    'plan' => $key,
+                ]],
+            ]);
+        }
+
+        // update user
+        auth()->user()->update([
+            'billing_customer' => $customer->id,
+            'billing_subscription' => $subscription->id,
+            'billing_plan' => $key,
+            'billing_cc_last4' => $token->card->last4,
+            'billing_period_ends' => Carbon::createFromTimestamp($subscription->current_period_end),
+        ]);
+
+        activity('Subscribed to '.config('turtle.billing.plans.'.$key.'.name'));
+        flash('success', 'Thanks for subscribing!');
+
+        return response()->json(['reload_page' => true]);
+    }
+
+    // show billing cancel modal
+    public function billingCancelModal()
+    {
+        return view('turtle::auth.billing.cancel');
+    }
+
+    // cancel current subscription
+    public function billingCancel()
+    {
+        Stripe::setApiKey(config('turtle.billing.stripe_secret_key'));
+
+        // cancel subscription
+        Subscription::retrieve(auth()->user()->billing_subscription)->cancel();
+
+        // update user
+        auth()->user()->update([
+            'billing_subscription' => null,
+            'billing_plan' => null,
+            'billing_cc_last4' => null,
+            'billing_period_ends' => null,
+        ]);
+
+        activity('Cancelled Subscription');
+        flash('success', 'Subscription cancelled!');
+
+        return response()->json(['reload_page' => true]);
+    }
+
+    // handle subscription payments
+    public function billingWebhook()
+    {
+        if (request()->input('type') == 'invoice.payment_succeeded') {
+            $user = app(config('turtle.models.user'))->where('billing_customer', request()->input('data.object.customer'))->whereNotNull('billing_plan')->first();
+
+            if ($user) {
+                $user->update(['billing_period_ends' => Carbon::createFromTimestamp(request()->input('data.object.lines.data.0.period.end'))]);
+                $user->billing()->create([
+                    'user_id' => $user->id,
+                    'plan_name' => request()->input('data.object.lines.data.0.plan.name'),
+                    'amount' => number_format(request()->input('data.object.total') / 100, 2, '.', ' ').' '.strtoupper(request()->input('data.object.currency')),
+                    'cc_last4' => $user->billing_cc_last4,
+                ]);
+            }
+        }
+
+        return response('Success');
     }
 }
