@@ -165,7 +165,11 @@ You can enable/disable the core features inside of `config/turtle.php`:
 
 Turtle comes with user billing capabilities built in, which is fully integrated with the Stripe API. If you wish to enable billing and plan limits, please read the following directions.
 
-**Note: please make sure you have [verified your phone number](https://dashboard.stripe.com/phone-verification) in your Stripe account, and have added all of your subscription plans before continuing!**
+First, set up your Stripe account stuff:
+
+* Make sure you [verify your phone number](https://dashboard.stripe.com/phone-verification)
+* Add all of your [subscription plans](https://dashboard.stripe.com/plans)
+* [Create a webhook](https://dashboard.stripe.com/account/webhooks) for `invoice.payment_suceeded` pointing to the `billing/webhook` route
 
 Add the billing fillables to your Auth `User` model e.g.:
 
@@ -227,7 +231,7 @@ Add your Stripe API key & plan information to the `turtle.billing` config values
 ],
 ```
 
-Add the limit model as the 4th `shellshock()` parameter in your controller `add()` methods where limiting should be applied e.g.:
+Add the model as the 4th `shellshock()` parameter in your controller `add()` methods where limiting should be applied e.g.:
 
 ```
 $this->shellshock(request(), [
@@ -238,7 +242,7 @@ $this->shellshock(request(), [
 
 This will show the user an error alert if they have reached their plan limit for the specified model.
 
-Billable users will have a `Billing` dropdown option when they click on their username in the navbar. They will also be shown an alert if they are in free trial mode or their plan has expired due to lack of payment. Also, there will be a checkbox for `Billable` in the `User` add/edit modals, which allows you enable or disable billing per user (for example, if you want to give a specific user free access to your app forever).
+Billable users will have a `Billing` dropdown option when they click on their username in the navbar. They will also be shown an alert if they are in free trial mode or their account has become inactive due to lack of payment. Also, there will be a checkbox for `Billable` in the `User` add/edit modals, which allows you enable or disable billing per user (for example, if you want to give a specific user free access to your app forever).
 
 ## reCAPTCHA
 
