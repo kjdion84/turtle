@@ -244,6 +244,21 @@ This will show the user an error alert if they have reached their plan limit for
 
 Billable users will have a `Billing` dropdown option when they click on their username in the navbar. They will also be shown an alert if they are in free trial mode or their account has become inactive due to lack of payment. Also, there will be a checkbox for `Billable` in the `User` add/edit modals, which allows you enable or disable billing per user (for example, if you want to give a specific user free access to your app forever).
 
+If you don't use billing and wish to remove those columns from the users table, create the following migration:
+
+```
+// drop billing columns from users table
+Schema::table('users', function (Blueprint $table) {
+    $table->dropColumn('billable');
+    $table->dropColumn('billing_customer');
+    $table->dropColumn('billing_subscription');
+    $table->dropColumn('billing_plan');
+    $table->dropColumn('billing_cc_last4');
+    $table->dropColumn('billing_trial_ends');
+    $table->dropColumn('billing_period_ends');
+});
+```
+
 ## reCAPTCHA
 
 You must enter your reCAPTCHA keys in order for reCAPTCHA to display in the register/contact forms. If no reCAPTCHA keys are entered, those forms simple won't use it which leaves you vulnerable to spam & bot accounts.
