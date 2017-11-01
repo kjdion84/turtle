@@ -7,9 +7,7 @@ Turtle is a Laravel 5.5 package with front & backend scaffolding including a BRE
 ## Useful Links
 
 * Repo: https://github.com/kjdion84/turtle
-* Demo: http://turtledemo.kjdion.com
-    * Admin Login: admin@example.com/admin123
-    * Tenant Login: tester@example.com/test123
+* Demo: http://turtledemo.kjdion.com (admin@example.com/admin123)
 
 ## Readme Navigation
 

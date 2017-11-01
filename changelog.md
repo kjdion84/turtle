@@ -1,6 +1,20 @@
 # 11/01/2017
 
-...
+* added trial limiting
+* improved billing plan config
+* added `createGroup()` method for perms
+* updated Bootstrap to Beta 4 v2
+* updated readme
+* added new tenant BREAD stubs
+* refactored `use` in controllers, models, & traits
+* refactored BREAD fillable
+* added string to add buttons
+* improved billing logic with new methods `billingTrial()` and `billingActive()` returns bool
+* added reCAPTCHA to forgot password/password reset pages
+* added automatic timezone detection on register page
+* added `UserScope` for tenancy models
+* fixed billing  dates not using user timezone
+* improved billing limit validation
 
 # 10/14/2017
 
