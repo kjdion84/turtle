@@ -50,16 +50,8 @@ class CreatePermissionsTables extends Migration
         });
 
         // add user & role permissions
-        app(config('turtle.models.permission'))->create(['group' => 'Users', 'name' => 'Browse Users']);
-        app(config('turtle.models.permission'))->create(['group' => 'Users', 'name' => 'Read Users']);
-        app(config('turtle.models.permission'))->create(['group' => 'Users', 'name' => 'Edit Users']);
-        app(config('turtle.models.permission'))->create(['group' => 'Users', 'name' => 'Add Users']);
-        app(config('turtle.models.permission'))->create(['group' => 'Users', 'name' => 'Delete Users']);
-        app(config('turtle.models.permission'))->create(['group' => 'Roles', 'name' => 'Browse Roles']);
-        app(config('turtle.models.permission'))->create(['group' => 'Roles', 'name' => 'Read Roles']);
-        app(config('turtle.models.permission'))->create(['group' => 'Roles', 'name' => 'Edit Roles']);
-        app(config('turtle.models.permission'))->create(['group' => 'Roles', 'name' => 'Add Roles']);
-        app(config('turtle.models.permission'))->create(['group' => 'Roles', 'name' => 'Delete Roles']);
+        app(config('turtle.models.permission'))->createGroup('Users', ['Browse Users', 'Read Users', 'Edit Users', 'Add Users', 'Delete Users']);
+        app(config('turtle.models.permission'))->createGroup('Roles', ['Browse Roles', 'Read Roles', 'Edit Roles', 'Add Roles', 'Delete Roles']);
     }
 
     public function down()

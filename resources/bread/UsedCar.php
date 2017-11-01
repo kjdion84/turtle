@@ -4,7 +4,7 @@ return [
 
     // do not add trailing slashes!
     'paths' => [
-        'stubs' => 'vendor/kjdion84/turtle/resources/bread/stubs',
+        'stubs' => 'vendor/kjdion84/turtle/resources/bread/stubs/default',
         'controller' => 'app/Http/Controllers',
         'model' => 'app',
         'views' => 'resources/views',

@@ -4,9 +4,12 @@
 
 /* bread_model_use */
 use App\Http\Controllers\Controller;
+use Kjdion84\Turtle\Traits\Shellshock;
 
 class bread_controller_class extends Controller
 {
+    use Shellshock;
+
     public function __construct()
     {
         $this->middleware('auth');

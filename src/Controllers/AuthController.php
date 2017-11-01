@@ -9,10 +9,10 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Kjdion84\Turtle\Traits\Shellshock;
 use Stripe\Customer;
 use Stripe\Stripe;
 use Stripe\Subscription;
@@ -20,6 +20,8 @@ use Stripe\Token;
 
 class AuthController extends Controller
 {
+    use Shellshock;
+
     public function __construct()
     {
         $this->middleware('guest')->only(['loginForm', 'login', 'registerForm', 'register', 'passwordEmailForm', 'passwordEmail', 'passwordResetForm', 'passwordReset']);
@@ -97,7 +99,7 @@ class AuthController extends Controller
         if (config('turtle.allow.billing')) {
             request()->merge([
                 'billable' => true,
-                'billing_trial_ends' => Carbon::createFromTimestamp(strtotime(config('turtle.billing.trial_period'))),
+                'billing_trial_ends' => Carbon::createFromTimestamp(strtotime(config('turtle.billing.trial.period'))),
             ]);
         }
 
@@ -145,6 +147,7 @@ class AuthController extends Controller
     {
         $this->shellshock(request(), [
             'email' => 'required|email',
+            'g-recaptcha-response' => 'sometimes|recaptcha',
         ]);
 
         if (($user = app(config('turtle.models.user'))->where('email', request()->input('email'))->first())) {
@@ -176,6 +179,7 @@ class AuthController extends Controller
         $this->shellshock(request(), [
             'email' => 'required|email',
             'password' => 'required|confirmed',
+            'g-recaptcha-response' => 'sometimes|recaptcha',
         ]);
 
         $response = Password::broker()->reset(request()->except('_token'), function ($user, $password) {
@@ -231,13 +235,13 @@ class AuthController extends Controller
     }
 
     // show billing plan payment modal
-    public function billingPlanModal($key)
+    public function billingPlanModal($id)
     {
-        return view('turtle::auth.billing.plan', compact('key'));
+        return view('turtle::auth.billing.plan', compact('id'));
     }
 
     // show billing plan payment modal
-    public function billingPlan($key)
+    public function billingPlan($id)
     {
         $this->shellshock(request(), [
             'number' => 'required|numeric',
@@ -275,7 +279,7 @@ class AuthController extends Controller
         if (!auth()->user()->billing_subscription) {
             $subscription = Subscription::create([
                 'customer' => $customer->id,
-                'items' => [['plan' => $key]],
+                'items' => [['plan' => $id]],
             ]);
         }
         else {
@@ -283,7 +287,7 @@ class AuthController extends Controller
             Subscription::update($subscription->id, [
                 'items' => [[
                     'id' => $subscription->items->data[0]->id,
-                    'plan' => $key,
+                    'plan' => $id,
                 ]],
             ]);
         }
@@ -292,12 +296,12 @@ class AuthController extends Controller
         auth()->user()->update([
             'billing_customer' => $customer->id,
             'billing_subscription' => $subscription->id,
-            'billing_plan' => $key,
+            'billing_plan' => $id,
             'billing_cc_last4' => $token->card->last4,
             'billing_period_ends' => Carbon::createFromTimestamp($subscription->current_period_end),
         ]);
 
-        activity('Subscribed to '.config('turtle.billing.plans.'.$key.'.name'));
+        activity('Subscribed to '.$id);
         flash('success', 'Thanks for subscribing!');
 
         return response()->json(['reload_page' => true]);

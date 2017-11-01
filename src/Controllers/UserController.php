@@ -4,10 +4,13 @@ namespace Kjdion84\Turtle\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Kjdion84\Turtle\Traits\Shellshock;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
+    use Shellshock;
+
     public function __construct()
     {
         $this->middleware('auth');

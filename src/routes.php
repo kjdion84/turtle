@@ -24,8 +24,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('password/change', config('turtle.controllers.auth') . '@passwordChangeForm')->name('password.change');
     Route::patch('password/change', config('turtle.controllers.auth') . '@passwordChange');
     Route::get('billing', config('turtle.controllers.auth') . '@billing')->name('billing');
-    Route::get('billing/plan/{key}', config('turtle.controllers.auth') . '@billingPlanModal')->name('billing.plan');
-    Route::post('billing/plan/{key}', config('turtle.controllers.auth') . '@billingPlan');
+    Route::get('billing/plan/{id}', config('turtle.controllers.auth') . '@billingPlanModal')->name('billing.plan');
+    Route::post('billing/plan/{id}', config('turtle.controllers.auth') . '@billingPlan');
     Route::get('billing/cancel', config('turtle.controllers.auth') . '@billingCancelModal')->name('billing.cancel');
     Route::post('billing/cancel', config('turtle.controllers.auth') . '@billingCancel');
     Route::post('billing/webhook', config('turtle.controllers.auth') . '@billingWebhook');

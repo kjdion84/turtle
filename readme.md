@@ -7,7 +7,9 @@ Turtle is a Laravel 5.5 package with front & backend scaffolding including a BRE
 ## Useful Links
 
 * Repo: https://github.com/kjdion84/turtle
-* Demo: http://turtledemo.kjdion.com (admin@example.com/admin123)
+* Demo: http://turtledemo.kjdion.com
+    * Admin Login: admin@example.com/admin123
+    * Tenant Login: tester@example.com/test123
 
 ## Readme Navigation
 
@@ -22,7 +24,7 @@ Turtle is a Laravel 5.5 package with front & backend scaffolding including a BRE
 ## Require via Composer
 
 ```
-composer require kjdion84/turtle:"~1.3"
+composer require kjdion84/turtle:"~1.4"
 ```
 
 ## Publish Required Files
@@ -51,24 +53,20 @@ Add the publish command for the `public` tag to your project `composer.json` `sc
 }
 ```
 
-This will ensure the public assets are updated when you run `composer update`.
-
 ## Modify Existing Files
 
-Import & add the `LikesPizza` trait & `timezone` fillable to your Auth `User` model e.g.:
+Import & add the `InTime` and `LikesPizza` traits to your Auth `User` (normally `App\User`) model e.g.:
 
 ```
-use Notifiable, LikesPizza;
+use Notifiable, InTime, LikesPizza;
+```
 
+Add the `timezone` fillable to your Auth `User` model e.g.:
+
+```
 protected $fillable = [
     'name', 'email', 'password', 'timezone',
 ];
-```
-
-Import & add the `Shellshock` trait to `App\Http\Controllers\Controller` e.g.:
-
-```
-use AuthorizesRequests, DispatchesJobs, ValidatesRequests, Shellshock;
 ```
 
 Uncomment `AuthenticateSession` inside of `App\Http\Kernel` e.g.:
@@ -94,13 +92,10 @@ public function render($request, Exception $exception)
 
 ## Config & Migrate
 
-If you get a string length error when migrating, add `Schema::defaultStringLength(191)` to the `boot()` method of `App\Providers\AppServiceProvider` e.g.:
+Set your MySQL engine to InnoDB inside of `config/database.php` e.g.:
 
 ```
-public function boot()
-{
-    Schema::defaultStringLength(191);
-}
+'engine' => 'InnoDB ROW_FORMAT=DYNAMIC',
 ```
 
 Make sure your database and SMTP server is configured in your `.env` file, then migrate:
@@ -111,7 +106,7 @@ php artisan migrate
 
 ## Remove Default `/` & Auth Routes
 
-Comment out or completely remove the default `/` route inside of `routes/web.php` e.g.:
+Comment out or completely remove the default `/` and `Auth` routes inside of `routes/web.php` e.g.:
 
 ```
 /*
@@ -119,15 +114,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 */
-```
 
-You must also comment out or remove any of the default Laravel auth routes if they are present in `routes/web.php` e.g.:
-
-```
 // Auth::routes();
 ```
-
-To avoid any other routing conflicts, check out `vendor/kjdion84/turtle/src/routes.php` to ensure that your existing routes do not have the same URL or names.
 
 ## Logging In
 
@@ -145,8 +134,6 @@ You can publish all of the views to `resources/views/vendor/turtle/*.*` with:
 php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="views"
 ```
 
-Now you can customize your views without having to extend the package controllers.
-
 # Configuration
 
 You can enable/disable the core features inside of `config/turtle.php`:
@@ -155,13 +142,27 @@ You can enable/disable the core features inside of `config/turtle.php`:
 * `allow.registration`: enable/disable user registration
 * `allow.contact`: enable/disable the contact form
 * `allow.billing`: enable/disable user billing
-* `billing.*`: configuration for billing & stripe integration
+* `billing.*`: configuration for billing & stripe integration (see [Billing](#billing))
 * `demo_mode`: enable/disable demo mode (only allows login, but still shows buttons & features)
 * `recaptcha.site_key`: your reCAPTCHA site key (optional)
 * `recaptcha.secret_key`: your reCAPTCHA secret key (optional)
 * `classes.*`: change these if you want the package to use your own classes
 
-## Billing
+## reCAPTCHA
+
+You must enter your reCAPTCHA keys in order for reCAPTCHA to display in the register/contact forms. If no reCAPTCHA keys are entered, those forms simple won't use it which leaves you vulnerable to spam & bot accounts.
+
+## Using Custom Classes
+
+You can easily just extend the package models & controllers if you need more control.
+
+For example, you're probably going to want to change the `dashboard()` method in `AppController` to show charts or something. So you'd create your new controller file inside `App\Controllers` and extend the turtle `AppController` class.
+
+Then you can simply override the `dashboard()` method to do whatever you want. This can be done for every single model & controller of the package. Check out the model & controller files in `vendor/kjdion84/turtle/src` to see the methods you can override and what they do by default.
+
+Also, make sure to update `config/turtle.php` with the class namespace for the new controller.
+
+# Billing
 
 Turtle comes with user billing capabilities built in, which is fully integrated with the Stripe API. If you wish to enable billing and plan limits, please read the following directions.
 
@@ -171,13 +172,67 @@ First, set up your Stripe account stuff:
 * Add all of your [subscription plans](https://dashboard.stripe.com/plans)
 * [Create a webhook](https://dashboard.stripe.com/account/webhooks) for `invoice.payment_suceeded` pointing to the `billing/webhook` route
 
-Add the billing fillables to your Auth `User` model e.g.:
+Add the `billing_*` fillables to your Auth `User` model e.g.:
 
 ```
 protected $fillable = [
     'name', 'email', 'password', 'timezone',
     'billable', 'billing_customer', 'billing_subscription', 'billing_plan', 'billing_cc_last4', 'billing_trial_ends', 'billing_period_ends',
 ];
+```
+
+Add your Stripe API key & plan information to the `turtle.billing` config values e.g.:
+
+```
+'billing' => [
+    'stripe_secret_key' => 'sk_test_QSlbZsEyVA0pRaqyWKduKRYT',
+    'trial' => [
+        'period' => '30 days',
+        'limits' => [
+            // model => limit (null = unlimited)
+            'App\Post' => 1,
+        ],
+    ],
+    'plans' => [
+        // Stripe plan ID => [options]
+        'Basic' => [
+            'html' => '
+                <p>A great starter plan for individuals.</p>
+                <ul class="list-unstyled">
+                    <li><b>5</b> Posts</li>
+                </ul>
+                <p class="lead"><b>$10</b>/month</p>
+            ',
+            'limits' => [
+                'App\Post' => 5,
+            ],
+        ],
+        'Plus' => [
+            'html' => '
+                <p>A bit more flexible, ideal for teams.</p>
+                <ul class="list-unstyled">
+                    <li><b>25</b> Posts</li>
+                </ul>
+                <p class="lead"><b>$20</b>/month</p>
+            ',
+            'limits' => [
+                'App\Post' => 25,
+            ],
+        ],
+        'Premium' => [
+            'html' => '
+                <p>Fully unlimited! Perfect for companies.</p>
+                <ul class="list-unstyled">
+                    <li><b>Unlimited</b> Posts</li>
+                </ul>
+                <p class="lead"><b>$50</b>/month</p>
+            ',
+            'limits' => [
+                'App\Post' => null,
+            ],
+        ],
+    ],
+],
 ```
 
 Disable CSRF protection for the stripe webhook route in `App\Http\Middleware\VerifyCsrfToken` e.g.:
@@ -188,88 +243,15 @@ protected $except = [
 ];
 ```
 
-Add your Stripe API key & plan information to the `turtle.billing` config values e.g.:
+When generating BREAD for any tenant-related models (e.g. `App\Post` in the above example), use the `tenant` stubs path e.g.:
 
 ```
-'billing' => [
-    'stripe_secret_key' => 'sk_test_QSlbZsEyVA0pRaqyWKduKRYT',
-    'trial_period' => '30 days',
-    'plans' => [
-        // Stripe plan ID => [options]
-        'basic' => [
-            'name' => 'Basic',
-            'description' => 'A great starter plan for individuals.',
-            'price' => '$10',
-            'period' => 'month',
-            'limits' => [
-                // model => limit
-                'App\Post' => 5,
-                'App\Page' => 5,
-            ],
-        ],
-        'plus' => [
-            'name' => 'Plus',
-            'description' => 'A bit more flexible, ideal for teams.',
-            'price' => '$20',
-            'period' => 'month',
-            'limits' => [
-                'App\Post' => 25,
-                'App\Page' => 25,
-            ],
-        ],
-        'premium' => [
-            'name' => 'Premium',
-            'description' => 'Fully unlimited! Perfect for companies.',
-            'price' => '$50',
-            'period' => 'month',
-            'limits' => [
-                'App\Post' => null, // null = unlimited
-                'App\Page' => null, // null = unlimited
-            ],
-        ],
-    ],
-],
+'stubs' => 'vendor/kjdion84/turtle/resources/bread/stubs/tenant',
 ```
 
-Add the model as the 4th `shellshock()` parameter in your controller `add()` methods where limiting should be applied e.g.:
+This will make sure the model uses the `UserScope`, has a `user_id` fillable & database column, does not require permissions for owned models, and has the `shellshock()` parameter set for plan limiting (which shows an error alert if they have reached their limit when attempting to add).
 
-```
-$this->shellshock(request(), [
-    'title' => 'required',
-    'body' => 'required',
-], false, 'App\Post');
-```
-
-This will show the user an error alert if they have reached their plan limit for the specified model.
-
-Billable users will have a `Billing` dropdown option when they click on their username in the navbar. They will also be shown an alert if they are in free trial mode or their account has become inactive due to lack of payment. Also, there will be a checkbox for `Billable` in the `User` add/edit modals, which allows you enable or disable billing per user (for example, if you want to give a specific user free access to your app forever).
-
-If you don't use billing and wish to remove those columns from the users table, create the following migration:
-
-```
-// drop billing columns from users table
-Schema::table('users', function (Blueprint $table) {
-    $table->dropColumn('billable');
-    $table->dropColumn('billing_customer');
-    $table->dropColumn('billing_subscription');
-    $table->dropColumn('billing_plan');
-    $table->dropColumn('billing_cc_last4');
-    $table->dropColumn('billing_trial_ends');
-    $table->dropColumn('billing_period_ends');
-});
-```
-
-## reCAPTCHA
-
-You must enter your reCAPTCHA keys in order for reCAPTCHA to display in the register/contact forms. If no reCAPTCHA keys are entered, those forms simple won't use it which leaves you vulnerable to spam & bot accounts.
-
-## Using Your Own Classes
-
-You can easily just extend the package models & controllers if you need more control.
-
-For example, you're probably going to want to change the `dashboard()` method in `AppController` to show charts or something. So you'd create your new controller file inside `App\Controllers` and extend the turtle `AppController` class.
-
-Then you can simply override the `dashboard()` method to do whatever you want. This can be done for every single model & controller of the package. Check out the model & controller files in `vendor/kjdion84/turtle/src` to see the methods you can override and what they do by default.
+Billable users will have a `Billing` dropdown option when they click on their username in the navbar as well. They will also be shown an alert if they are in free trial mode or their account has become inactive due to lack of payment. Also, there will be a checkbox for `Billable` in the `User` add/edit modals, which allows you enable or disable billing per user (for example, if you want to give a specific user free access to your app forever, uncheck this box).
 
 # Usage
 
@@ -378,6 +360,7 @@ There are a number of replacement strings you will see in the stub template file
 * `bread_attribute_rule_edit`: current attribute update rule e.g. `required|unique:bread_model_variables,bread_attribute_name,$id`
 * `bread_attribute_datatable`: show this attribute in datatables? boolean value e.g. `true`
 * `bread_model_class`: model class name e.g. `BlogPost`
+* `bread_model_class_full`: model class with namespace e.g. `App\BlogPost`
 * `bread_model_variables`: plural model variable name e.g. `blog_posts`
 * `bread_model_variable`: singular model variable name e.g. `blog_post`
 * `bread_model_strings`: plural model title name e.g. `Blog Posts`

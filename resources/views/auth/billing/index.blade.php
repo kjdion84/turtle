@@ -6,28 +6,18 @@
         <h1 class="display-5 mt-4 mb-4">@yield('title')</h1>
 
         <div class="row">
-            @foreach(config('turtle.billing.plans') as $key => $plan)
+            @foreach(config('turtle.billing.plans') as $id => $plan)
                 <div class="col-md mb-4">
                     <div class="card">
                         <div class="card-header">
-                            {{ $plan['name'] }}
+                            {{ $id }}
                         </div>
                         <div class="card-body">
-                            <p>{{ $plan['description'] }}</p>
-                            <ul class="list-unstyled">
-                                @foreach($plan['limits'] as $model => $limit)
-                                    @php
-                                    $model = explode('\\', $model);
-                                    $model = preg_replace('/(?!^)[A-Z]{2,}(?=[A-Z][a-z])|[A-Z][a-z]/', ' $0', end($model));
-                                    @endphp
-                                    <li><b>{{ $limit ? $limit : 'Unlimited' }}</b> {{ $limit != 1 ? str_plural($model) : $model }}</li>
-                                @endforeach
-                            </ul>
-                            <p class="lead"><b>{{ $plan['price'] }}</b>/{{ $plan['period'] }}</p>
-                            @if(auth()->user()->billing_plan == $key && auth()->user()->billing_period_ends > \Carbon\Carbon::now())
+                            {!! $plan['html'] !!}
+                            @if(auth()->user()->billing_plan == $id && auth()->user()->billingActive())
                                 <a href="#" class="btn btn-success disabled">Current Plan</a>
                             @else
-                                <button type="button" class="btn btn-primary" data-modal="{{ route('billing.plan', $key) }}">Select Plan</button>
+                                <button type="button" class="btn btn-primary" data-modal="{{ route('billing.plan', $id) }}">Select Plan</button>
                             @endif
                         </div>
                     </div>
@@ -40,9 +30,9 @@
                 Payment Method
             </div>
             <div class="card-body">
-                @if(!auth()->user()->billing_plan && auth()->user()->billing_trial_ends > \Carbon\Carbon::now())
+                @if(auth()->user()->billingTrial())
                     Your free trial expires at {{ auth()->user()->billing_trial_ends }}, please select a plan above.
-                @elseif(!auth()->user()->billing_plan || auth()->user()->billing_period_ends < \Carbon\Carbon::now())
+                @elseif(!auth()->user()->billingActive())
                     Your account is currently inactive, please select a plan above.
                 @else
                     <h5><i class="fa fa-credit-card"></i> ************{{ auth()->user()->billing_cc_last4 }}</h5>
@@ -60,7 +50,7 @@
                 @if(auth()->user()->billing->isEmpty())
                     You have no payment history. If you recently made a payment, please refresh this page in a minute.
                 @else
-                    <table class="table table-hover table-responsive mb-0" cellspacing="0" width="100%">
+                    <table class="table table-hover mb-0">
                         <thead>
                         <tr>
                             <th>Plan</th>

@@ -5,9 +5,12 @@ namespace Kjdion84\Turtle\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Mail;
+use Kjdion84\Turtle\Traits\Shellshock;
 
 class AppController extends Controller
 {
+    use Shellshock;
+
     public function __construct()
     {
         $this->middleware('auth')->only('dashboard');

@@ -28,6 +28,13 @@
                         <input type="password" name="password_confirmation" id="password_confirmation" class="form-control">
                     </div>
 
+                    @if (config('turtle.recaptcha.site_key'))
+                        <div class="form-group">
+                            <div class="g-recaptcha" data-sitekey="{{ config('turtle.recaptcha.site_key') }}"></div>
+                            <script src="https://www.google.com/recaptcha/api.js"></script>
+                        </div>
+                    @endif
+
                     <button type="submit" class="btn btn-primary">Reset Password</button>
                 </form>
             </div>

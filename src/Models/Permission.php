@@ -11,6 +11,17 @@ class Permission extends Model
 
     protected $fillable = ['group', 'name'];
 
+    // create group
+    public function createGroup($group, $names = [])
+    {
+        foreach ($names as $name) {
+            $this->create([
+                'group' => $group,
+                'name' => $name,
+            ]);
+        }
+    }
+
     // roles relationship
     public function roles()
     {

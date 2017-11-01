@@ -1,14 +1,17 @@
 @extends('turtle::layouts.modal')
 
-@section('title', config('turtle.billing.plans.'.$key.'.name'))
+@section('title', $id)
 @section('content')
-    <form method="POST" action="{{ route('billing.plan', $key) }}" novalidate>
+    <form method="POST" action="{{ route('billing.plan', $id) }}" novalidate>
         {{ csrf_field() }}
 
         <div class="modal-body">
             <div class="form-group">
                 <label for="number">Card Number</label>
-                <input type="number" name="number" id="number" class="form-control">
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-credit-card"></i></div>
+                    <input type="number" name="number" id="number" class="form-control">
+                </div>
             </div>
 
             <div class="form-group">

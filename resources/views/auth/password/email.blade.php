@@ -16,6 +16,13 @@
                         <input type="email" name="email" id="email" class="form-control">
                     </div>
 
+                    @if (config('turtle.recaptcha.site_key'))
+                        <div class="form-group">
+                            <div class="g-recaptcha" data-sitekey="{{ config('turtle.recaptcha.site_key') }}"></div>
+                            <script src="https://www.google.com/recaptcha/api.js"></script>
+                        </div>
+                    @endif
+
                     <button type="submit" class="btn btn-primary">Email Password Reset Link</button>
                 </form>
             </div>

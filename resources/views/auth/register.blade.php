@@ -38,9 +38,21 @@
                         </div>
                     @endif
 
+                    <input type="hidden" name="timezone" id="timezone">
+
                     <button type="submit" class="btn btn-primary">Register</button>
                 </form>
             </div>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+            var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            if (typeof timezone === 'undefined') timezone = 'UTC';
+            $('#timezone').val(timezone);
+        });
+    </script>
+@endpush

@@ -3,9 +3,12 @@
 namespace Kjdion84\Turtle\Controllers;
 
 use App\Http\Controllers\Controller;
+use Kjdion84\Turtle\Traits\Shellshock;
 
 class RoleController extends Controller
 {
+    use Shellshock;
+
     public function __construct()
     {
         $this->middleware('auth');

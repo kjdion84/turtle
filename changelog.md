@@ -1,12 +1,6 @@
-# 10/31/2017
+# 11/01/2017
 
-Turtle 2.0 is coming! I am just posting this update to let you know that there will be a few big changes including:
-
-* Converting all views to AdminLTE
-* Adding a new, optional global scope for `user_id`, useful for SaaS apps
-* Warning alerts for plan limits
-* Refactoring of readme
-* Adding reCAPTCHA to forgot password pages
+...
 
 # 10/14/2017
 

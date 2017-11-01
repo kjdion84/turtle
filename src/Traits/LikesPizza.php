@@ -4,8 +4,6 @@ namespace Kjdion84\Turtle\Traits;
 
 trait LikesPizza
 {
-    use InTime;
-
     // roles relationship
     public function roles()
     {
@@ -40,5 +38,17 @@ trait LikesPizza
         }
 
         return false;
+    }
+
+    // billing trial active
+    public function billingTrial()
+    {
+        return !$this->billing_plan && $this->billing_trial_ends > \Carbon\Carbon::now()->tz($this->timezone);
+    }
+
+    // billing account active
+    public function billingActive()
+    {
+        return $this->billing_plan && $this->billing_period_ends > \Carbon\Carbon::now()->tz($this->timezone);
     }
 }

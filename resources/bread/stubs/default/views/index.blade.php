@@ -4,7 +4,7 @@
 @section('content')
     <div class="container">
         @can('Add bread_model_strings')
-            <button type="button" class="btn btn-primary btn-icon float-right" data-modal="{{ route('bread_model_variables.add') }}" data-toggle="tooltip" title="Add"><i class="fa fa-plus"></i></button>
+            <button type="button" class="btn btn-primary float-right" data-modal="{{ route('bread_model_variables.add') }}" data-toggle="tooltip"><i class="fa fa-plus"></i> Add</button>
         @endcan
 
         <h1 class="display-5 mt-4 mb-4">@yield('title')</h1>

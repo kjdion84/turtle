@@ -17,7 +17,7 @@
 <body{!! session('flash') ? ' data-flash-class="'.session('flash.0').'" data-flash-message="'.session('flash.1').'"' : '' !!}>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
-        <a class="navbar-brand" href="{{ route('index') }}"><i class="fa fa-cog"></i> {{ config('app.name') }}</a>
+        <a class="navbar-brand" href="{{ route('index') }}"><i class="fa fa-code-fork"></i> {{ config('app.name') }}</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>

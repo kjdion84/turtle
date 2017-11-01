@@ -16,11 +16,7 @@ class Createbread_model_classTable extends Migration
         });
 
         // add permissions
-        app(config('turtle.models.permission'))->create(['group' => 'bread_model_strings', 'name' => 'Browse bread_model_strings']);
-        app(config('turtle.models.permission'))->create(['group' => 'bread_model_strings', 'name' => 'Read bread_model_strings']);
-        app(config('turtle.models.permission'))->create(['group' => 'bread_model_strings', 'name' => 'Edit bread_model_strings']);
-        app(config('turtle.models.permission'))->create(['group' => 'bread_model_strings', 'name' => 'Add bread_model_strings']);
-        app(config('turtle.models.permission'))->create(['group' => 'bread_model_strings', 'name' => 'Delete bread_model_strings']);
+        app(config('turtle.models.permission'))->createGroup('bread_model_strings', ['Browse bread_model_strings', 'Read bread_model_strings', 'Edit bread_model_strings', 'Add bread_model_strings', 'Delete bread_model_strings']);
     }
 
     public function down()

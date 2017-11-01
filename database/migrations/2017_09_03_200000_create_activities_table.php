@@ -22,8 +22,7 @@ class CreateActivitiesTable extends Migration
         });
 
         // add permissions
-        app(config('turtle.models.permission'))->create(['group' => 'Activities', 'name' => 'Browse Activities']);
-        app(config('turtle.models.permission'))->create(['group' => 'Activities', 'name' => 'Read Activities']);
+        app(config('turtle.models.permission'))->createGroup('Activities', ['Browse Activities', 'Read Activities']);
     }
 
     public function down()

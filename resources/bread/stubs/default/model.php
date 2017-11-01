@@ -9,5 +9,5 @@ class bread_model_class extends Model
 {
     use InTime;
 
-    /* bread_fillable */
+    protected $fillable = ["/* bread_fillable */"];
 }
