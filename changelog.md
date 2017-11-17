@@ -1,3 +1,7 @@
+# 11/17/2017
+
+Removed billing logic entirely. Use [Cashier](https://laravel.com/docs/5.5/billing) for billing in your projects instead.
+
 # 11/01/2017
 
 * added trial limiting

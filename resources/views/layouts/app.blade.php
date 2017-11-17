@@ -52,9 +52,6 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"><i class="fa fa-user-circle"></i> {{ auth()->user()->name }}</a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            @if(auth()->user()->billable && config('turtle.allow.billing'))
-                                <a class="dropdown-item{{ request()->is('billing') ?  ' active' : '' }}" href="{{ route('billing') }}">Billing</a>
-                            @endif
                             <a class="dropdown-item{{ request()->is('profile') ?  ' active' : '' }}" href="{{ route('profile') }}">Edit Profile</a>
                             <a class="dropdown-item{{ request()->is('password/change') ?  ' active' : '' }}" href="{{ route('password.change') }}">Change Password</a>
                             <a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
@@ -66,7 +63,6 @@
     </div>
 </nav>
 
-@include('turtle::auth.billing.alert')
 @yield('content')
 
 <footer>

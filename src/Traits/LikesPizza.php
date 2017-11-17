@@ -16,12 +16,6 @@ trait LikesPizza
         return $this->hasMany(config('turtle.models.activity'));
     }
 
-    // billing relationship
-    public function billing()
-    {
-        return $this->hasMany(config('turtle.models.billing'));
-    }
-
     // gate permissions
     public function hasPermission($name)
     {
@@ -38,17 +32,5 @@ trait LikesPizza
         }
 
         return false;
-    }
-
-    // billing trial active
-    public function billingTrial()
-    {
-        return !$this->billing_plan && $this->billing_trial_ends > \Carbon\Carbon::now()->tz($this->timezone);
-    }
-
-    // billing account active
-    public function billingActive()
-    {
-        return $this->billing_plan && $this->billing_period_ends > \Carbon\Carbon::now()->tz($this->timezone);
     }
 }

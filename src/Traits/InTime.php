@@ -21,16 +21,6 @@ trait InTime
         return $this->inTime($value);
     }
 
-    public function getBillingTrialEndsAttribute($value)
-    {
-        return $this->inTime($value);
-    }
-
-    public function getBillingPeriodEndsAttribute($value)
-    {
-        return $this->inTime($value);
-    }
-
     // convert database time to user timezone
     public function inTime($value)
     {

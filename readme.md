@@ -2,7 +2,7 @@
 
 # Turtle
 
-Turtle is a Laravel 5.5 package with front & backend scaffolding including a BREAD generator, auth integration, Stripe billing, roles, permissions, contact forms, reCAPTCHA, activity logs, demo mode, user timezones, AJAX BREAD/validation, Bootstrap 4, DataTables, & more!
+Turtle is a Laravel 5.5 package with front & backend scaffolding including a BREAD generator, auth integration, roles, permissions, contact forms, reCAPTCHA, activity logs, demo mode, user timezones, AJAX BREAD/validation, Bootstrap 4, DataTables, & more!
 
 ## Useful Links
 
@@ -13,7 +13,6 @@ Turtle is a Laravel 5.5 package with front & backend scaffolding including a BRE
 
 * [Installation](#installation)
 * [Configuration](#configuration)
-* [Billing](#billing)
 * [Usage](#usage)
 * [Issues & Support](#issues--support)
 
@@ -139,8 +138,6 @@ You can enable/disable the core features inside of `config/turtle.php`:
 * `allow.frontend`: enable/disable the frontend
 * `allow.registration`: enable/disable user registration
 * `allow.contact`: enable/disable the contact form
-* `allow.billing`: enable/disable user billing
-* `billing.*`: configuration for billing & stripe integration (see [Billing](#billing))
 * `demo_mode`: enable/disable demo mode (only allows login, but still shows buttons & features)
 * `recaptcha.site_key`: your reCAPTCHA site key (optional)
 * `recaptcha.secret_key`: your reCAPTCHA secret key (optional)
@@ -159,97 +156,6 @@ For example, you're probably going to want to change the `dashboard()` method in
 Then you can simply override the `dashboard()` method to do whatever you want. This can be done for every single model & controller of the package. Check out the model & controller files in `vendor/kjdion84/turtle/src` to see the methods you can override and what they do by default.
 
 Also, make sure to update `config/turtle.php` with the class namespace for the new controller.
-
-# Billing
-
-Turtle comes with user billing capabilities built in, which is fully integrated with the Stripe API. If you wish to enable billing and plan limits, please read the following directions.
-
-First, set up your Stripe account stuff:
-
-* Make sure you [verify your phone number](https://dashboard.stripe.com/phone-verification)
-* Add all of your [subscription plans](https://dashboard.stripe.com/plans)
-* [Create a webhook](https://dashboard.stripe.com/account/webhooks) for `invoice.payment_suceeded` pointing to the `billing/webhook` route
-
-Add the `billing_*` fillables to your Auth `User` model e.g.:
-
-```
-protected $fillable = [
-    'name', 'email', 'password', 'timezone',
-    'billable', 'billing_customer', 'billing_subscription', 'billing_plan', 'billing_cc_last4', 'billing_trial_ends', 'billing_period_ends',
-];
-```
-
-Add your Stripe API key & plan information to the `turtle.billing` config values e.g.:
-
-```
-'billing' => [
-    'stripe_secret_key' => 'sk_test_QSlbZsEyVA0pRaqyWKduKRYT',
-    'trial' => [
-        'period' => '30 days',
-        'limits' => [
-            // model => limit (null = unlimited)
-            'App\Post' => 1,
-        ],
-    ],
-    'plans' => [
-        // Stripe plan ID => [options]
-        'Basic' => [
-            'html' => '
-                <p>A great starter plan for individuals.</p>
-                <ul class="list-unstyled">
-                    <li><b>5</b> Posts</li>
-                </ul>
-                <p class="lead"><b>$10</b>/month</p>
-            ',
-            'limits' => [
-                'App\Post' => 5,
-            ],
-        ],
-        'Plus' => [
-            'html' => '
-                <p>A bit more flexible, ideal for teams.</p>
-                <ul class="list-unstyled">
-                    <li><b>25</b> Posts</li>
-                </ul>
-                <p class="lead"><b>$20</b>/month</p>
-            ',
-            'limits' => [
-                'App\Post' => 25,
-            ],
-        ],
-        'Premium' => [
-            'html' => '
-                <p>Fully unlimited! Perfect for companies.</p>
-                <ul class="list-unstyled">
-                    <li><b>Unlimited</b> Posts</li>
-                </ul>
-                <p class="lead"><b>$50</b>/month</p>
-            ',
-            'limits' => [
-                'App\Post' => null,
-            ],
-        ],
-    ],
-],
-```
-
-Disable CSRF protection for the stripe webhook route in `App\Http\Middleware\VerifyCsrfToken` e.g.:
-
-```
-protected $except = [
-    'billing/webhook',
-];
-```
-
-When generating BREAD for any tenant-related models (e.g. `App\Post` in the above example), use the `tenant` stubs path e.g.:
-
-```
-'stubs' => 'vendor/kjdion84/turtle/resources/bread/stubs/tenant',
-```
-
-This will make sure the model uses the `UserScope`, has a `user_id` fillable & database column, does not require permissions for owned models, and has the `shellshock()` parameter set for plan limiting (which shows an error alert if they have reached their limit when attempting to add).
-
-Billable users will have a `Billing` dropdown option when they click on their username in the navbar as well. They will also be shown an alert if they are in free trial mode or their account has become inactive due to lack of payment. Also, there will be a checkbox for `Billable` in the `User` add/edit modals, which allows you enable or disable billing per user (for example, if you want to give a specific user free access to your app forever, uncheck this box).
 
 # Usage
 

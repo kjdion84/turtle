@@ -26,16 +26,6 @@
                 </select>
             </div>
 
-            @if(config('turtle.allow.billing'))
-                <div class="form-check">
-                    <label class="form-check-label">
-                        <input type="hidden" name="billable" value="0">
-                        <input type="checkbox" name="billable" id="billable" class="form-check-input" value="1"{{ $user->billable ? ' checked' : '' }}>
-                        Billable
-                    </label>
-                </div>
-            @endif
-
             <div class="form-group">
                 <div>
                     <label>Roles</label>
