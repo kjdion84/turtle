@@ -264,7 +264,6 @@ There are a number of replacement strings you will see in the stub template file
 * `bread_attribute_rule_edit`: current attribute update rule e.g. `required|unique:bread_model_variables,bread_attribute_name,$id`
 * `bread_attribute_datatable`: show this attribute in datatables? boolean value e.g. `true`
 * `bread_model_class`: model class name e.g. `BlogPost`
-* `bread_model_class_full`: model class with namespace e.g. `App\BlogPost`
 * `bread_model_variables`: plural model variable name e.g. `blog_posts`
 * `bread_model_variable`: singular model variable name e.g. `blog_post`
 * `bread_model_strings`: plural model title name e.g. `Blog Posts`

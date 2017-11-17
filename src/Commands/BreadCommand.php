@@ -43,19 +43,17 @@ class BreadCommand extends Command
     public function setReplaceModel()
     {
         $model = basename($this->argument('file'), '.php');
-        $model_full = $this->replaceNamespace($this->options['paths']['model']) . '\\' . $model;
         $controller = $model.'Controller';
         $string = trim(preg_replace('/(?!^)[A-Z]{2,}(?=[A-Z][a-z])|[A-Z][a-z]/', ' $0', $model));
 
         $this->replace['model'] = [
             'bread_model_class' => $model,
-            'bread_model_class_full' => $model_full,
             'bread_model_variables' => str_replace(' ', '_', strtolower(str_plural($string))),
             'bread_model_variable' => str_replace(' ', '_', strtolower($string)),
             'bread_model_strings' => str_plural($string),
             'bread_model_string' => $string,
             '/* bread_model_namespace */' => 'namespace ' . $this->replaceNamespace($this->options['paths']['model']) . ';',
-            '/* bread_model_use */' => 'use '. $model_full . ';',
+            '/* bread_model_use */' => 'use '. $this->replaceNamespace($this->options['paths']['model']) . '\\' . $model . ';',
             'bread_controller_class' => $controller,
             'bread_controller_view' => $this->replaceView($this->options['paths']['views']),
             'bread_controller_routes' => ltrim(str_replace('App\\Http\\Controllers', '', $this->replaceNamespace($this->options['paths']['controller'])) . '\\' . $controller, '\\'),
