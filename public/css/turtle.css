@@ -62,16 +62,6 @@ footer {
     z-index: 9999;
 }
 
-/* invalid feedback message */
-div.is-invalid {
-    color: #dc3545;
-}
-.is-invalid-message {
-    margin-top: .25rem;
-    font-size: .875rem;
-    color: #dc3545;
-}
-
 /* xl modal */
 @media (min-width: 992px) {
     .modal-xl {

@@ -20,104 +20,89 @@ Turtle is a Laravel 5.5 package with front & backend scaffolding including a BRE
 
 ## Require via Composer
 
-```
-composer require kjdion84/turtle:"~1.5"
-```
+    composer require kjdion84/turtle:"~1.5"
 
 ## Publish Required Files
 
-```
-php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="required"
-```
+    php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="required"
 
 This will create the following files:
 
-```
-config/turtle.php
-resources/views/vendor/turtle/layouts/app.blade.php
-public/turtle/*.*
-```
+    config/turtle.php
+    resources/views/vendor/turtle/layouts/app.blade.php
+    public/turtle/*.*
 
 ## Auto-Publish Public Assets After Updates
 
 Add the publish command for the `public` tag to your project `composer.json` `scripts` e.g.:
 
-```
-"scripts": {
-    "post-update-cmd": [
-        "php artisan vendor:publish --provider=Kjdion84\\Turtle\\TurtleServiceProvider --tag=public --force"
-    ]
-}
-```
+    "scripts": {
+        "post-update-cmd": [
+            "php artisan vendor:publish --provider=Kjdion84\\Turtle\\TurtleServiceProvider --tag=public --force"
+        ]
+    }
 
 ## Modify Existing Files
 
 Import & add the `InTime` and `LikesPizza` traits to your Auth `User` (normally `App\User`) model e.g.:
 
-```
-use Notifiable, InTime, LikesPizza;
-```
+    use Notifiable, InTime, LikesPizza;
 
 Add the `timezone` fillable to your Auth `User` model e.g.:
 
-```
-protected $fillable = [
-    'name', 'email', 'password', 'timezone',
-];
-```
+    protected $fillable = [
+        'name', 'email', 'password', 'timezone',
+    ];
 
 Uncomment `AuthenticateSession` inside of `App\Http\Kernel` e.g.:
 
-```
-\Illuminate\Session\Middleware\AuthenticateSession::class,
-```
+    \Illuminate\Session\Middleware\AuthenticateSession::class,
 
-Add expired session handling to the `App\Exceptions\Handler` `render()` method e.g.:
+Add expired session handling to `App\Exceptions\Handler::render()` (import `TokenMismatchException`) e.g.:
 
-```
-public function render($request, Exception $exception)
-{
-    if ($exception instanceof TokenMismatchException) {
-        flash('danger', 'Session expired, please try again.');
-
-        return response()->json(['reload_page' => true]);
+    public function render($request, Exception $exception)
+    {
+        if ($exception instanceof TokenMismatchException) {
+            flash('danger', 'Session expired, please try again.');
+    
+            return response()->json(['reload_page' => true]);
+        }
+    
+        return parent::render($request, $exception);
     }
-
-    return parent::render($request, $exception);
-}
-```
 
 ## Config & Migrate
 
-Set your MySQL engine to InnoDB inside of `config/database.php` e.g.:
+Add default string length to `App\Providers\AppServiceProvider::boot()` (import `Schema`) e.g.:
 
-```
-'engine' => 'InnoDB ROW_FORMAT=DYNAMIC',
-```
+    public function boot()
+    {
+        Schema::defaultStringLength(191);
+    }
 
 Make sure your database and SMTP server is configured in your `.env` file, then migrate:
 
-```
-php artisan migrate
-```
+    php artisan migrate
 
 ## Remove Default `/` & Auth Routes
 
 Comment out or completely remove the default `/` and `Auth` routes inside of `routes/web.php` e.g.:
 
-```
-/*
-Route::get('/', function () {
-    return view('welcome');
-});
-*/
-
-// Auth::routes();
-```
+    /*
+    Route::get('/', function () {
+        return view('welcome');
+    });
+    */
+    
+    // Auth::routes();
 
 ## Logging In
 
 Now that installation is done, you can visit your app URL and log in using `admin@example.com` and `admin123` as the password. I recommend changing these credentials right away!
+
+## Optional PHPStorm helpers
+
+Enable the Laravel PHPStorm plugin and add the [Laravel IDE helper file](https://gist.githubusercontent.com/barryvdh/5227822/raw/4be028a27c4ec782965bb8f2fdcb4c08c71a441d/_ide_helper.php) to the project root folder.
 
 ## Optional Cleanup
 
@@ -127,9 +112,7 @@ You can remove the `app\Http\Controllers\Auth` folder and the `resources/views/w
 
 You can publish all of the views to `resources/views/vendor/turtle/*.*` with:
 
-```
-php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="views"
-```
+    php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="views"
 
 # Configuration
 
@@ -211,17 +194,13 @@ The package controller methods return a JSON response for BREAD operations. This
 
 Use `php artisan make:bread {file}` to generate BREAD files e.g.:
 
-```
-php artisan make:bread resources/bread/MyModel.php
-```
+    php artisan make:bread resources/bread/MyModel.php
 
 This will generate a controller, model, migration, views, add a navbar menu item, and routes.
 
 You must make sure you create a `resources/bread/MyModel.php` file before running the command, where `MyModel` is the name of the model you want to generate. This model file will contain all of the path & attribute definitions for the model. Check out `vendor/kjdion84/turtle/resources/bread/UsedCar.php` for an example, or publish the example using:
 
-```
-php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="bread_example"
-```
+    php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="bread_example"
 
 This will create `resources/bread/UsedCar.php`.
 
@@ -281,9 +260,7 @@ You can use any of these replacement strings inside of the stub templates or mod
 
 You can easily publish the default stub folder to `resources/bread/stubs/default` with:
 
-```
-php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="bread_stubs"
-```
+    php artisan vendor:publish --provider="Kjdion84\Turtle\TurtleServiceProvider" --tag="bread_stubs"
 
 After doing so, simply rename the folder `default` to whatever you want. Now you can modify it to your hearts desires. Just make sure you specify the full path to this new folder in the `paths.stubs` value for any BREAD model file you want to use it.
 

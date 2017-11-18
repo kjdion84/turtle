@@ -34,7 +34,7 @@ $.extend(true, $.fn.dataTable.defaults, {
         var search_button = $('<button type="button" class="btn btn-primary btn-sm btn-icon ml-1 mb-1" data-toggle="tooltip" title="Search"><i class="fa fa-search"></i></button>').click(function () {
             self.search(filter_input.val()).draw();
         });
-        var reset_button = $('<button type="button" class="btn btn-light btn-sm btn-icon ml-1 mb-1" data-toggle="tooltip" title="Reset"><i class="fa fa-undo"></i></button>').click(function () {
+        var reset_button = $('<button type="button" class="btn btn-secondary btn-sm btn-icon ml-1 mb-1" data-toggle="tooltip" title="Reset"><i class="fa fa-undo"></i></button>').click(function () {
             filter_input.val('');
             search_button.click();
         });
@@ -97,7 +97,7 @@ $(document).ready(function () {
             // remove existing alert & invalid field info
             $('.alert-fixed').remove();
             $('.is-invalid').removeClass('is-invalid');
-            $('.is-invalid-message').remove();
+            $('.invalid-feedback').remove();
 
             $.ajax({
                 url: form.attr('action'),
@@ -157,7 +157,7 @@ $(document).ready(function () {
                         $.each(data.responseJSON.errors, function (key, value) {
                             element = (key === 'g-recaptcha-response') ? $('.g-recaptcha') : $('#' + $.escapeSelector(key));
                             element.addClass('is-invalid');
-                            element.after('<div class="is-invalid-message">' + value[0] + '</div>');
+                            element.after('<div class="invalid-feedback d-block">' + value[0] + '</div>');
                         });
                     }
 
@@ -173,7 +173,7 @@ $(document).ready(function () {
     // remove invalid highlight on input
     $(document).on('keyup change', '.is-invalid', function () {
         $(this).removeClass('is-invalid');
-        $(this).next('.is-invalid-message').remove();
+        $(this).next('.invalid-feedback').remove();
     });
 
     // show ajax modal with content

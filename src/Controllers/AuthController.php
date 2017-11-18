@@ -3,8 +3,6 @@
 namespace Kjdion84\Turtle\Controllers;
 
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
-use GrahamCampbell\Throttle\Facades\Throttle;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Mail\Message;
@@ -13,10 +11,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Kjdion84\Turtle\Traits\Shellshock;
-use Stripe\Customer;
-use Stripe\Stripe;
-use Stripe\Subscription;
-use Stripe\Token;
 
 class AuthController extends Controller
 {
@@ -27,6 +21,7 @@ class AuthController extends Controller
         $this->middleware('guest')->only(['loginForm', 'login', 'registerForm', 'register', 'passwordEmailForm', 'passwordEmail', 'passwordResetForm', 'passwordReset']);
         $this->middleware('auth')->only(['logout', 'profileForm', 'profile', 'passwordChangeForm', 'passwordChange']);
         $this->middleware('allow:registration')->only(['registerForm', 'register']);
+        $this->middleware('GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware:5,1')->only('login', 'passwordEmail', 'passwordReset');
     }
 
     // show login form
@@ -43,10 +38,7 @@ class AuthController extends Controller
             'password' => 'required',
         ], true);
 
-        $throttler = Throttle::get(request()->instance(), 5, 1);
-
-        if (auth()->guard()->attempt(request()->only(['email', 'password']), request()->has('remember')) && $throttler->check()) {
-            $throttler->clear();
+        if (auth()->guard()->attempt(request()->only(['email', 'password']), request()->has('remember'))) {
             request()->session()->regenerate();
 
             activity('Logged In');
@@ -54,13 +46,8 @@ class AuthController extends Controller
 
             return response()->json(['redirect' => request()->session()->pull('url.intended', route('index'))]);
         }
-        else if (!$throttler->check()) {
-            return response()->json(['errors' => ['email' => ['Too many failures, try again in one minute.']]], 422);
-        }
         else {
-            $throttler->attempt();
-
-            return response()->json(['errors' => ['email' => [trans('auth.failed')]]], 422);
+            return response()->json(['message' => trans('auth.failed')], 422);
         }
     }
 
@@ -154,7 +141,7 @@ class AuthController extends Controller
             return response()->json(['reload_page' => true]);
         }
         else {
-            return response()->json(['errors' => ['email' => [trans('auth.failed')]]], 422);
+            return response()->json(['message' => trans('auth.failed')], 422);
         }
     }
 
@@ -188,7 +175,7 @@ class AuthController extends Controller
             return response()->json(['redirect' => route('index')]);
         }
         else {
-            return response()->json(['errors' => ['email' => [trans($response)]]], 422);
+            return response()->json(['message' => trans($response)], 422);
         }
     }
 
@@ -215,7 +202,7 @@ class AuthController extends Controller
             return response()->json(['reload_page' => true]);
         }
         else {
-            return response()->json(['errors' => ['current_password' => [trans('auth.failed')]]], 422);
+            return response()->json(['message' => trans('auth.failed')], 422);
         }
     }
 }
