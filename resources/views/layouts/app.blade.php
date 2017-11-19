@@ -65,7 +65,7 @@
 
 @yield('content')
 
-<footer>
+<footer class="footer bg-light">
     <div class="container">
         @if (config('turtle.allow.contact'))
             <a href="{{ route('contact') }}" class="pull-right text-secondary">Contact</a>
