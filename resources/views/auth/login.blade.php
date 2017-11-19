@@ -25,7 +25,7 @@
                         <input type="password" name="password" id="password" class="form-control">
                     </div>
 
-                    <div class="form-check mb-3">
+                    <div class="form-check">
                         <label class="form-check-label">
                             <input type="checkbox" name="remember" class="form-check-input">
                             Remember
