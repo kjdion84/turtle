@@ -1,10 +1,30 @@
 <?php
 
-Route::group(['middleware' => 'web'], function () {
+$aRouteGroupConfig = ['middleware' => 'web'];
+$bHasPrefix = false;
+
+if (config('turtle.routes.prefix') !== null)
+{
+    $bHasPrefix = true;
+    $aRouteGroupConfig['prefix'] = config('turtle.routes.prefix');
+}
+
+Route::group($aRouteGroupConfig, function () use ($bHasPrefix){
+
     // app routes
-    Route::get('/', config('turtle.controllers.app') . '@index')->name('index');
-    Route::get('home', config('turtle.controllers.app') . '@indexRedirect');
-    Route::get('dashboard', config('turtle.controllers.app') . '@dashboard')->name('dashboard');
+    if ($bHasPrefix)
+    {
+        Route::get('/index', config('turtle.controllers.app') . '@index')->name('index');
+        Route::get('home', config('turtle.controllers.app') . '@indexRedirect');
+        Route::get('/', config('turtle.controllers.app') . '@dashboard')->name('dashboard');
+    }
+    else
+    {
+        Route::get('/', config('turtle.controllers.app') . '@index')->name('index');
+        Route::get('home', config('turtle.controllers.app') . '@indexRedirect');
+        Route::get('dashboard', config('turtle.controllers.app') . '@dashboard')->name('dashboard');
+    }
+    
     Route::get('delete/{route}/{id}', config('turtle.controllers.app') . '@deleteModal')->name('delete');
     Route::get('contact', config('turtle.controllers.app') . '@contactForm')->name('contact');
     Route::post('contact', config('turtle.controllers.app') . '@contact');
