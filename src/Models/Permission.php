@@ -27,4 +27,10 @@ class Permission extends Model
     {
         return $this->belongsToMany(config('turtle.models.role'));
     }
+
+    // users relationship
+    public function users()
+    {
+        return $this->belongsToMany(config('turtle.models.user'));
+    }
 }

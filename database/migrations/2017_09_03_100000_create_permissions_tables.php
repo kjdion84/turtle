@@ -49,6 +49,16 @@ class CreatePermissionsTables extends Migration
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
         });
 
+        // create permission user relation table
+        Schema::create('permission_user', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('permission_id')->unsigned_();
+            $table->integer('user_id')->unsigned_();
+
+            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+
         // add user & role permissions
         app(config('turtle.models.permission'))->createGroup('Users', ['Browse Users', 'Read Users', 'Edit Users', 'Add Users', 'Delete Users']);
         app(config('turtle.models.permission'))->createGroup('Roles', ['Browse Roles', 'Read Roles', 'Edit Roles', 'Add Roles', 'Delete Roles']);
@@ -58,8 +68,9 @@ class CreatePermissionsTables extends Migration
     {
         // drop permissions tables
         Schema::dropIfExists('roles');
-        Schema::dropIfExists('user_role');
+        Schema::dropIfExists('role_user');
         Schema::dropIfExists('permissions');
-        Schema::dropIfExists('role_permission');
+        Schema::dropIfExists('permission_role');
+        Schema::dropIfExists('permission_user');
     }
 }
