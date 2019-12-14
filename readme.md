@@ -1,3 +1,9 @@
+**Package no longer maintained**
+
+Please consider Laravel AJAX CRUD instead: https://github.com/kdion4891/laravel-ajax-crud
+
+
+
 ![Imgur](https://i.imgur.com/REzZP08.png)
 
 # Turtle
