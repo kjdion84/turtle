@@ -31,5 +31,7 @@ return [
         'role' => 'Kjdion84\Turtle\Models\Role',
         'user' => 'App\User',
     ],
-
+    'routes' => [
+        'prefix' => 'dashboard'
+    ]
 ];
