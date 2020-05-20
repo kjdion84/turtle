@@ -42,8 +42,9 @@ class UserController extends Controller
     public function addModal()
     {
         $roles = app(config('turtle.models.role'))->get()->sortBy('name');
+        $group_permissions = app(config('turtle.models.permission'))->orderBy('group', 'asc')->orderBy('id', 'asc')->get()->groupBy('group');
 
-        return view('turtle::users.add', compact('roles'));
+        return view('turtle::users.add', compact('roles', 'group_permissions'));
     }
 
     // add user
@@ -57,8 +58,9 @@ class UserController extends Controller
         ]);
 
         request()->merge(['password' => Hash::make(request()->input('password'))]);
-        $user = app(config('turtle.models.user'))->create(request()->all());
+        $user = app(config('turtle.models.user'))->create(request()->except('permissions'));
         $user->roles()->sync(request()->input('roles'));
+        $user->permissions()->sync(request()->input('permissions'));
 
         activity('Added User', $user);
 
@@ -74,8 +76,9 @@ class UserController extends Controller
     {
         $user = app(config('turtle.models.user'))->findOrFail($id);
         $roles = app(config('turtle.models.role'))->get()->sortBy('name');
+        $group_permissions = app(config('turtle.models.permission'))->orderBy('group', 'asc')->orderBy('id', 'asc')->get()->groupBy('group');
 
-        return view('turtle::users.edit', compact('user', 'roles'));
+        return view('turtle::users.edit', compact('user', 'roles', 'group_permissions'));
     }
 
     // edit user
@@ -88,8 +91,9 @@ class UserController extends Controller
         ]);
 
         $user = app(config('turtle.models.user'))->findOrFail($id);
-        $user->update(request()->all());
+        $user->update(request()->except('permissions'));
         $user->roles()->sync(request()->input('roles'));
+        $user->permissions()->sync(request()->input('permissions'));
 
         activity('Edited User', $user);
 

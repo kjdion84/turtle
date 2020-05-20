@@ -16,11 +16,22 @@ trait LikesPizza
         return $this->hasMany(config('turtle.models.activity'));
     }
 
+    // permissions relationship
+    public function permissions()
+    {
+        return $this->belongsToMany(config('turtle.models.permission'));
+    }
+
     // gate permissions
     public function hasPermission($name)
     {
         // admin role always has permission
         if ($this->roles->contains('name', 'Admin')) {
+            return true;
+        }
+
+        // permission by user
+        if ($this->permissions->contains('name', $name)){
             return true;
         }
 
